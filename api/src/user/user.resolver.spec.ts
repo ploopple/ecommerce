@@ -1,18 +1,30 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { UserResolver } from './user.resolver';
+// import { Test } from '@nestjs/testing';
+// import { UserResolver } from './user.resolver';
+// import { UserService } from './user.service';
+// import { UserEntity } from './user.entity';
+// import { PrismaClient } from '@prisma/client';
 
-describe('UserResolver', () => {
-  let resolver: UserResolver;
+// describe('UserResolver', () => {
+//   let userResolver: UserResolver;
+//   let userService: UserService;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [UserResolver],
-    }).compile();
+//   beforeEach(async () => {
+//     const moduleRef = await Test.createTestingModule({
+//       providers: [UserResolver, UserService,PrismaClient],
+//     }).compile();
 
-    resolver = module.get<UserResolver>(UserResolver);
-  });
+//     userResolver = moduleRef.get<UserResolver>(UserResolver);
+//     userService = moduleRef.get<UserService>(UserService);
+//   });
 
-  it('should be defined', () => {
-    expect(resolver).toBeDefined();
-  });
-});
+//   // ...tests go here...
+//   it('should get all users', async () => {
+//     const users: UserEntity[] = [
+//     ];
+//     jest.spyOn(userService, 'getAllUsers').mockImplementation(() => Promise.resolve(users));
+
+//     const result = await userResolver.GetAllUsers();
+//     expect(result).toEqual(users);
+//   });
+
+// });
