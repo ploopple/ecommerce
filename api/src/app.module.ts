@@ -6,7 +6,8 @@ import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { UserModule } from './user/user.module';
 import { PrismaClient } from '@prisma/client';
-import { AuthModule } from './auth/auth.module';
+// import { AuthModule } from './auth/auth.module';
+import { ProductModule } from './product/product.module';
 
 
 @Module({
@@ -19,7 +20,8 @@ import { AuthModule } from './auth/auth.module';
     ConfigModule.forRoot({isGlobal: true}),
     UserModule,
     PrismaClient,
-    AuthModule
+    ProductModule,
+    // AuthModule
   ],
   controllers: [],
   providers: [],
