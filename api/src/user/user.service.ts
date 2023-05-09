@@ -2,21 +2,28 @@ import { Injectable } from '@nestjs/common';
 import { UserInput } from './dto/user.input';
 import { UserEntity } from './dto/user.entity';
 import { PrismaClient } from '@prisma/client';
-import { JwtService } from '@nestjs/jwt';
+import * as jwt from 'jsonwebtoken';
+
 
 @Injectable()
 export class UserService {
 
-    constructor(private prisma: PrismaClient, private jwtService: JwtService) {}
+    constructor(private prisma: PrismaClient) {}
 
-    async createNewUser(req: UserInput): Promise<UserEntity> {
+    private createJWTToken(userId: string): string {
+        return jwt.sign(userId, process.env.SECRETKEY);
+    }
+
+    async createNewUser(req: UserInput): Promise<string> {
         try {
-            return await this.prisma.user.create({
+            const user =  await this.prisma.user.create({
                 data: {
                     email: req.email, 
                     username: req.username, 
                     hashPassword: req.password
                 }}) 
+                console.log(user.id)
+                return this.createJWTToken(user.id+"")
         } catch (err) {
             return err 
         }

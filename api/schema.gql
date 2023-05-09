@@ -18,10 +18,11 @@ scalar DateTime
 
 type Query {
   GetUserInfo(userId: Float!): UserEntity!
+  GetSomthing: String!
 }
 
 type Mutation {
-  CreateNewUser(req: UserInput!): UserEntity!
+  CreateNewUser(req: UserInput!): String!
 }
 
 input UserInput {
