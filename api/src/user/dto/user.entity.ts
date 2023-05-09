@@ -1,4 +1,6 @@
 import { Field, ObjectType } from "@nestjs/graphql";
+import { Product } from "@prisma/client";
+import { ProductEntity } from "src/product/dto/product.entity";
 
 @ObjectType()
 export class UserEntity {
@@ -13,6 +15,9 @@ export class UserEntity {
 
     @Field()
     hashPassword: string
+
+    // @Field()
+    // products: any
 
     @Field()
     createdAt: Date 
