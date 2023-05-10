@@ -12,10 +12,7 @@ export class UserService {
     constructor(private prisma: PrismaClient) { }
 
     private createJWTToken(userId: string): string {
-        const token = jwt.sign({ userId }, process.env.SECRETKEY, {  expiresIn: '20s' });
-
-
-        // return jwt.sign(userId, process.env.SECRETKEY);
+        const token = jwt.sign({ userId }, process.env.SECRETKEY, {  expiresIn: '1h' });
         return token;
 
     }

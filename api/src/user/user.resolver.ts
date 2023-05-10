@@ -14,7 +14,7 @@ export class UserResolver {
     @Query(() => UserEntity)
     GetUserInfo(@Context('user') user: any) {
         console.log(user)
-        return this.userService.getUserInfo(+user.userId)
+        return this.userService.getUserInfo(+user)
     }
 
     @Query(() => String)

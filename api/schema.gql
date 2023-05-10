@@ -32,6 +32,8 @@ type ProductEntity {
 type Query {
   GetUserInfo: UserEntity!
   Login(req: UserInputLogin!): String!
+  GetProductById(productId: Float!): ProductEntity!
+  GetAllProducts: [ProductEntity!]!
 }
 
 input UserInputLogin {
@@ -42,6 +44,8 @@ input UserInputLogin {
 type Mutation {
   SignUp(req: UserInputSignUp!): String!
   CreateNewProduct(req: ProductInput!): ProductEntity!
+  UpdateProductById(productId: Float!): ProductEntity!
+  DeleteProductById(productId: Float!): String!
 }
 
 input UserInputSignUp {
