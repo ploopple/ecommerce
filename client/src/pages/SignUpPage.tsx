@@ -3,6 +3,7 @@ import { isValidEmail } from "../components/isValidEmail"
 import { gql, useMutation, useQuery } from "@apollo/client";
 import Loading from "../components/Loading";
 import Cookies from 'universal-cookie';
+import { Navigate } from 'react-router-dom';
 
 interface ISignUpData {
   [key: string]: { value: string, errMsg: string }
@@ -68,10 +69,10 @@ const SignUpPage = () => {
         },
       },
     });
-    if(data.SignUp) {
-
-  cookies.set("token",data.SignUp)
     }
+  if(!loading && !error && data && data.SignUp) {
+      cookies.set("token",data.SignUp)
+    return <Navigate to="/cart"/>
   }
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">

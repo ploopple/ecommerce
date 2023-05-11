@@ -1,5 +1,4 @@
-import { FC, useEffect, useState } from "react"
-import SignUpPage from "./pages/SignUpPage"
+import { FC } from "react"
 import { gql, useQuery } from "@apollo/client"
 import Cookies from "universal-cookie"
 import Loading from "./components/Loading"
@@ -21,26 +20,28 @@ const GET_USER_INFO = gql`
 }`
 
 
-const PrivateRoutes: FC<IPrivateRoutes> = ({children}) => {
-    const cookie = new Cookies
-    // const [isAuth, setIsAuth] = useState<boolean>(false)
+const cookie = new Cookies
+const PrivateRoutes: FC<IPrivateRoutes> = ({ children }) => {
+    const token = cookie.get("token")
     const { data, loading, error } = useQuery(GET_USER_INFO, {
         context: {
-          headers: {
-            Authorization: `Bearer ${cookie.get("token")}`,
-          },
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         },
-      });
-      if(loading) {
-        return <Loading/>
-      }
+        fetchPolicy: "no-cache"
+    });
 
-      console.log(data)
-    if(!loading && !error && data.GetUserInfo.username) {
+    console.log(data)
+    if (loading) {
+        return <Loading />
+    }
+
+    if (!loading && !error && data.GetUserInfo) {
         return children
     }
 
-        return <Navigate to={"/signUp"} />
+    return <Navigate to={"/signUp"} />
 }
 
 export default PrivateRoutes
