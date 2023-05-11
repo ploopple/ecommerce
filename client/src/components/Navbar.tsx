@@ -9,6 +9,9 @@ const Navbar = () => {
             </h1>
             <ul className='flex'>
                 <li>
+                    <Link to={"login"}>Login</Link>
+                </li>
+                <li className='ml-8'>
                     <Link to={"signUp"}>SignUp</Link>
                 </li>
                 <li className='mx-20'>
