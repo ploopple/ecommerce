@@ -13,8 +13,8 @@ function App() {
       <main className='w-full h-[94vh]'>
         <Routes>
           <Route path='' element={<HomePage />} />
-          <Route path='signUp' element={<SignUpPage />} />
-          <Route path='cart' element={<PrivateRoutes><CartPage /></PrivateRoutes>} />
+          <Route path='signUp' element={<PrivateRoutes isPrivate={false}><SignUpPage /></PrivateRoutes>} />
+          <Route path='cart' element={<PrivateRoutes isPrivate={true}><CartPage /></PrivateRoutes>} />
           <Route path='*' element={<NotFound />} />
         </Routes>
       </main>

@@ -5,6 +5,7 @@ import Loading from "./components/Loading"
 import { Navigate } from "react-router-dom"
 
 interface IPrivateRoutes {
+    isPrivate: boolean
     children: JSX.Element
 }
 const GET_USER_INFO = gql`
@@ -21,7 +22,7 @@ const GET_USER_INFO = gql`
 
 
 const cookie = new Cookies
-const PrivateRoutes: FC<IPrivateRoutes> = ({ children }) => {
+const PrivateRoutes: FC<IPrivateRoutes> = ({ isPrivate, children }) => {
     const token = cookie.get("token")
     const { data, loading, error } = useQuery(GET_USER_INFO, {
         context: {
@@ -37,11 +38,18 @@ const PrivateRoutes: FC<IPrivateRoutes> = ({ children }) => {
         return <Loading />
     }
 
-    if (!loading && !error && data.GetUserInfo) {
-        return children
-    }
+    if (isPrivate) {
+        if (!loading && !error && data.GetUserInfo) {
+            return children
+        }
 
-    return <Navigate to={"/signUp"} />
+        return <Navigate to={"/signUp"} />
+    }else{
+        if (!loading && !error && data.GetUserInfo) {
+            return <Navigate to={"/cart"} />
+        }
+            return children
+    }
 }
 
 export default PrivateRoutes
