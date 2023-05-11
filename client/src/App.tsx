@@ -4,6 +4,7 @@ import NotFound from './pages/NotFound';
 import CartPage from './pages/CartPage';
 import SignUpPage from './pages/SignUpPage';
 import Navbar from './components/Navbar';
+import PrivateRoutes from './PrivateRoutes';
 function App() {
 
   return (
@@ -13,7 +14,7 @@ function App() {
         <Routes>
           <Route path='' element={<HomePage />} />
           <Route path='signUp' element={<SignUpPage />} />
-          <Route path='cart' element={<CartPage />} />
+          <Route path='cart' element={<PrivateRoutes><CartPage /></PrivateRoutes>} />
           <Route path='*' element={<NotFound />} />
         </Routes>
       </main>

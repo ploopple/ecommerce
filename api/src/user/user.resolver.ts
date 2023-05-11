@@ -14,7 +14,7 @@ export class UserResolver {
     @Query(() => UserEntity)
     GetUserInfo(@Context('user') user: any) {
         console.log(user)
-        return this.userService.getUserInfo(+user)
+        return this.userService.getUserInfo(+user.userId)
     }
 
     @Query(() => String)
@@ -27,8 +27,4 @@ export class UserResolver {
         return this.userService.signUp(req)
     }
 
-    @Query(() => String)
-    Ran() {
-        return "hi there"
-    }
 }

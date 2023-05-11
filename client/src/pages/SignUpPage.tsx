@@ -7,17 +7,8 @@ import Cookies from 'universal-cookie';
 interface ISignUpData {
   [key: string]: { value: string, errMsg: string }
 }
-// const SIGNUP_MUTATION = gql`
-//   {
-//     Ran
-//   }
-// `;
 
-// const SIGNUP_MUTATION = gql`
-// mutation {
-//   SignUp(req: {email: "d.d.dddsddd", username: "", password: "123"})
-// }
-// `
+
 const SIGNUP_MUTATION = gql`
   mutation SignUp($req: UserInputSignUp!) {
     SignUp(req: $req)
@@ -27,7 +18,6 @@ const SIGNUP_MUTATION = gql`
 const SignUpPage = () => {
 
     const cookies = new Cookies();
-  // const { data, loading, error } = useQuery(FILMS_QUERY);
   const [signUpMutation, { data, loading, error }] = useMutation(SIGNUP_MUTATION);
 
   const [signUpData, setSignUpData] = useState<ISignUpData>({

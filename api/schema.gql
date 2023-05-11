@@ -32,7 +32,6 @@ type ProductEntity {
 type Query {
   GetUserInfo: UserEntity!
   Login(req: UserInputLogin!): String!
-  Ran: String!
   GetProductById(productId: Float!): ProductEntity!
   GetAllProducts: [ProductEntity!]!
 }
