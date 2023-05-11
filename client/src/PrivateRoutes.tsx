@@ -43,6 +43,7 @@ const PrivateRoutes: FC<IPrivateRoutes> = ({ isPrivate, children }) => {
             return children
         }
 
+        // window.location.href("/")
         return <Navigate to={"/signUp"} />
     }else{
         if (!loading && !error && data.GetUserInfo) {

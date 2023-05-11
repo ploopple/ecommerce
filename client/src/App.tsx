@@ -10,8 +10,7 @@ function App() {
 
   return (
     <Router>
-      <Navbar />
-      <main className='w-full h-[94vh]'>
+      {/* <main className='w-full h-[94vh]'> */}
         <Routes>
           <Route path='' element={<HomePage />} />
           <Route path='login' element={<PrivateRoutes isPrivate={false}><LoginPage /></PrivateRoutes>} />
@@ -19,7 +18,7 @@ function App() {
           <Route path='cart' element={<PrivateRoutes isPrivate={true}><CartPage /></PrivateRoutes>} />
           <Route path='*' element={<NotFound />} />
         </Routes>
-      </main>
+      {/* </main> */}
     </Router>
   )
 }

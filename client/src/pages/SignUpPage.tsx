@@ -4,6 +4,7 @@ import { gql, useMutation, useQuery } from "@apollo/client";
 import Loading from "../components/Loading";
 import Cookies from 'universal-cookie';
 import { Navigate } from 'react-router-dom';
+import Navbar from "../components/Navbar";
 
 interface ISignUpData {
   [key: string]: { value: string, errMsg: string }
@@ -75,6 +76,10 @@ const SignUpPage = () => {
     return <Navigate to="/cart"/>
   }
   return (
+<>
+
+      <Navbar />
+      <main className='w-full h-[94vh]'>
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       {loading && <Loading/>}
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -112,6 +117,8 @@ const SignUpPage = () => {
         </div>
       </div>
     </div>
+</main>
+</>
   )
 }
 
