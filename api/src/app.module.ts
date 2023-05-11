@@ -14,7 +14,7 @@ import { ProductModule } from './product/product.module';
     GraphQLModule.forRoot({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), './schema.gql'),
-      context: ({req}) => ({headers: req.headers})
+      context: ({req}) => ({headers: req.headers}),
     }),
     ConfigModule.forRoot({isGlobal: true}),
     UserModule,

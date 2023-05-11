@@ -26,4 +26,9 @@ export class UserResolver {
     SignUp(@Args("req") req: UserInputSignUp) {
         return this.userService.signUp(req)
     }
+
+    @Query(() => String)
+    Ran() {
+        return "hi there"
+    }
 }

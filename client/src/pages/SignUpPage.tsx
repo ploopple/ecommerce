@@ -1,11 +1,35 @@
 import { useState } from "react"
 import { isValidEmail } from "../components/isValidEmail"
+import { gql, useMutation, useQuery } from "@apollo/client";
+import Loading from "../components/Loading";
+import Cookies from 'universal-cookie';
 
 interface ISignUpData {
   [key: string]: { value: string, errMsg: string }
 }
+// const SIGNUP_MUTATION = gql`
+//   {
+//     Ran
+//   }
+// `;
+
+// const SIGNUP_MUTATION = gql`
+// mutation {
+//   SignUp(req: {email: "d.d.dddsddd", username: "", password: "123"})
+// }
+// `
+const SIGNUP_MUTATION = gql`
+  mutation SignUp($req: UserInputSignUp!) {
+    SignUp(req: $req)
+  }
+`;
 
 const SignUpPage = () => {
+
+    const cookies = new Cookies();
+  // const { data, loading, error } = useQuery(FILMS_QUERY);
+  const [signUpMutation, { data, loading, error }] = useMutation(SIGNUP_MUTATION);
+
   const [signUpData, setSignUpData] = useState<ISignUpData>({
     "username": { value: "", errMsg: "" },
     email: { value: "", errMsg: "" },
@@ -13,6 +37,7 @@ const SignUpPage = () => {
   })
 
   const handleOnInputChange = (e: any, target: string) => {
+
     let errMsg = ""
     if (target === "username") {
       errMsg = e.target.value.length >= 3 ? "" : target + " must be 3 characters or longer"
@@ -42,8 +67,25 @@ const SignUpPage = () => {
     }
   return true
   }
+
+  const handleOnClickSignUp = () => {
+    signUpMutation({
+      variables: {
+        req: {
+          username: signUpData.username.value,
+          email: signUpData.email.value,
+          password: signUpData.password.value,
+        },
+      },
+    });
+    if(data.SignUp) {
+
+  cookies.set("token",data.SignUp)
+    }
+  }
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+      {loading && <Loading/>}
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>
       </div>
@@ -73,8 +115,9 @@ const SignUpPage = () => {
         </div>
         <div>
           <button 
+            onClick={handleOnClickSignUp}
             disabled={isValidData()} 
-            className={`flex w-full justify-center rounded-md ${isValidData() ? "bg-indigo-300 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-500"}  px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}>Sign in</button>
+            className={`mt-4 flex w-full justify-center rounded-md ${isValidData() ? "bg-indigo-300 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-500"}  px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600`}>Sign in</button>
         </div>
       </div>
     </div>
