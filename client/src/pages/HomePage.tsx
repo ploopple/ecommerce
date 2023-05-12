@@ -1,15 +1,12 @@
-
-import React from 'react'
 import Navbar from '../components/Navbar'
 
 const HomePage = () => {
   return (
     <>
-    <Navbar/>
-
+      <Navbar />
       <main className='w-full h-[94vh]'>
-    <div>HomePage</div>
-    </main>
+        <div>HomePage</div>
+      </main>
     </>
   )
 }

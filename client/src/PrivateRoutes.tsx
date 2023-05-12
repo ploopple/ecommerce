@@ -3,6 +3,8 @@ import { gql, useQuery } from "@apollo/client"
 import Cookies from "universal-cookie"
 import Loading from "./components/Loading"
 import { Navigate } from "react-router-dom"
+import { useDispatch } from "react-redux"
+import { setUser } from "./features/userSlice"
 
 interface IPrivateRoutes {
     isPrivate: boolean
@@ -23,7 +25,11 @@ const GET_USER_INFO = gql`
 
 const cookie = new Cookies
 const PrivateRoutes: FC<IPrivateRoutes> = ({ isPrivate, children }) => {
+    const dispatch = useDispatch()
     const token = cookie.get("token")
+    if (!token && !isPrivate) {
+        return children
+    }
     const { data, loading, error } = useQuery(GET_USER_INFO, {
         context: {
             headers: {
@@ -38,18 +44,16 @@ const PrivateRoutes: FC<IPrivateRoutes> = ({ isPrivate, children }) => {
         return <Loading />
     }
 
-    if (isPrivate) {
-        if (!loading && !error && data.GetUserInfo) {
-            return children
-        }
+    if (error) {
+        cookie.remove("token")
+        dispatch(setUser(""))
+    }
 
-        // window.location.href("/")
-        return <Navigate to={"/signUp"} />
-    }else{
-        if (!loading && !error && data.GetUserInfo) {
-            return <Navigate to={"/cart"} />
-        }
-            return children
+    const isLoggedIn = data?.GetUserInfo;
+    if (isPrivate) {
+        return isLoggedIn ? children : <Navigate to="/signUp" />;
+    } else {
+        return isLoggedIn ? <Navigate to="/cart" /> : children;
     }
 }
 
