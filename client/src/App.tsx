@@ -6,6 +6,7 @@ import SignUpPage from './pages/SignUpPage';
 import Navbar from './components/Navbar';
 import PrivateRoutes from './PrivateRoutes';
 import LoginPage from './pages/LoginPage';
+import ProductByIdPage from './pages/ProductByIdPage';
 function App() {
 
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path='login' element={<PrivateRoutes isPrivate={false}><LoginPage /></PrivateRoutes>} />
           <Route path='signUp' element={<PrivateRoutes isPrivate={false}><SignUpPage /></PrivateRoutes>} />
           <Route path='cart' element={<PrivateRoutes isPrivate={true}><CartPage /></PrivateRoutes>} />
+          <Route path='product/:productId' element={<ProductByIdPage />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
       {/* </main> */}
