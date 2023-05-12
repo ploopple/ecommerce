@@ -2,12 +2,12 @@ import { createSlice } from "@reduxjs/toolkit"
 
 interface IInitialState {
     userData: any
-    allProductsData: any
+    allProductsData: any[]
 }
 
 const initialState: IInitialState = {
     userData: {},
-    allProductsData: {}
+    allProductsData: []
 }
 
 const dataSlice = createSlice({
