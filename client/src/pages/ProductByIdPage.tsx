@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Loading from '../components/Loading'
 import Navbar from '../components/Navbar'
+import { useDispatch } from 'react-redux'
+import { updateCart } from '../features/dataSlice'
 
 const GET_PRODUCT_BY_ID = gql`
 query GetProductById($id: Float!){
@@ -23,6 +25,7 @@ query GetProductById($id: Float!){
 `
 
 const ProductByIdPage = () => {
+  const dispatch = useDispatch()
   const [quantity, setQuantity] = useState(1)
   const [product, setProduct] = useState<any>({})
   const { productId } = useParams()
@@ -69,7 +72,9 @@ if (quantity < product.stocks) {
           </div>
           <div className='mt-8 flex'>
             <button className=' w-[49%] bg-green-700 text-white py-2 rounded-xl hover:bg-green-900'>Buy now</button>
-            <button className='ml-2 w-[49%] text-green-700 bg-gray-200 py-2 rounded-xl hover:bg-gray-300'>Add to cart</button>
+            <button 
+              onClick={() => dispatch(updateCart({product, quantity}))}
+              className='ml-2 w-[49%] text-green-700 bg-gray-200 py-2 rounded-xl hover:bg-gray-300'>Add to cart</button>
           </div>
         </div>
       </main>
