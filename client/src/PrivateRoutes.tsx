@@ -4,7 +4,7 @@ import Cookies from "universal-cookie"
 import Loading from "./components/Loading"
 import { Navigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
-import { setUser } from "./features/userSlice"
+import { setUser } from "./features/dataSlice"
 
 interface IPrivateRoutes {
     isPrivate: boolean
