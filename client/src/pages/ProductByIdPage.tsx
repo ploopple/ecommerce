@@ -57,7 +57,7 @@ if (quantity < product.stocks) {
     <>
       <Navbar />
       <main className='flex p-8'>
-        <img height={"50%"} className='border  rounded-xl bg-red-300' src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.qcReVnSVjwqWYRhMuEiuqwHaHa%26pid%3DApi&f=1&ipt=648a966b913977453c901fac4464dbd74745755bd70cbc3ef83b3b586e1c3110&ipo=images" alt="" />
+        <img width={500} height={500} className='border  rounded-xl bg-red-300' src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.qcReVnSVjwqWYRhMuEiuqwHaHa%26pid%3DApi&f=1&ipt=648a966b913977453c901fac4464dbd74745755bd70cbc3ef83b3b586e1c3110&ipo=images" alt="" />
         <div className='ml-8 mt-8'>
           <h1 className='font-bold'>{product.name}</h1>
           <h1 className='my-4'>By {product.createdBy}</h1>
