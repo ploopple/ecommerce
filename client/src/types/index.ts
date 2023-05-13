@@ -20,7 +20,26 @@ export interface IProductData {
     createdAt: Date
     updatedAt: Date
 }
-export interface IInputData {
-  [key: string]: { value: string | number, errMsg: string }
+export interface IInputDataString {
+   value: string , errMsg: string 
 }
-
+export interface IInputDataNumber {
+  value: number , errMsg: string 
+}
+export interface INewProductInputData {
+  name: IInputDataString
+  description: IInputDataString
+  price: IInputDataNumber
+  stocks: IInputDataNumber
+  createdBy: IInputDataString
+  image: IInputDataString
+}
+export interface ISignUpData {
+  username: IInputDataString
+  email: IInputDataString
+  password: IInputDataString
+}
+export interface ILoginData {
+  email: IInputDataString
+  password: IInputDataString
+}

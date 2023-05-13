@@ -6,10 +6,11 @@ import Cookies from 'universal-cookie';
 import { Navigate } from 'react-router-dom';
 import Navbar from "../components/Navbar";
 import { LOGIN_QUERY } from "../graphql/queries";
+import { ILoginData } from "../types";
 
-interface ISignUpData {
-  [key: string]: { value: string, errMsg: string }
-}
+// interface ISignUpData {
+//   [key: string]: { value: string, errMsg: string }
+// }
 
 
 // const LOGIN_QUERY= gql`
@@ -23,7 +24,7 @@ const LoginPage = () => {
     const cookies = new Cookies();
   const [ loginQuery,{ data, loading, error }] = useLazyQuery(LOGIN_QUERY);
 
-  const [signUpData, setSignUpData] = useState<ISignUpData>({
+  const [signUpData, setSignUpData] = useState<ILoginData>({
     email: { value: "", errMsg: "" },
     password: { value: "", errMsg: "" }
   })

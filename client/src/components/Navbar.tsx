@@ -5,9 +5,10 @@ import Cookies from 'universal-cookie'
 import Loading from './Loading'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../app/store'
-import { IInputData } from '../types'
+// import { IInputData } from '../types'
 import { ADD_NEW_PRODUCT } from '../graphql/mutations'
 import { GET_ALL_PRODUCTS } from '../graphql/queries'
+import { INewProductInputData } from '../types'
 
 // const GET_ALL_PRODUCTS = gql`
 // {
@@ -48,7 +49,7 @@ const cookie = new Cookies
 const Navbar = () => {
     // const queryClient = useQueryClient();
 
-    const [newProductInputData, setNewProductInputData] = useState<IInputData>({
+    const [newProductInputData, setNewProductInputData] = useState<INewProductInputData>({
         name: { value: "", errMsg: "" },
         description: { value: "", errMsg: "" },
         price: { value: 0, errMsg: "" },

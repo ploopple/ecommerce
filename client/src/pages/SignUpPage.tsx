@@ -6,10 +6,11 @@ import Cookies from 'universal-cookie';
 import { Navigate } from 'react-router-dom';
 import Navbar from "../components/Navbar";
 import { SIGNUP_MUTATION } from "../graphql/mutations";
+import { ISignUpData } from "../types";
 
-interface ISignUpData {
-  [key: string]: { value: string, errMsg: string }
-}
+// interface ISignUpData {
+//   [key: string]: { value: string, errMsg: string }
+// }
 
 
 // const SIGNUP_MUTATION = gql`
@@ -24,7 +25,7 @@ const SignUpPage = () => {
   const [signUpMutation, { data, loading, error }] = useMutation(SIGNUP_MUTATION);
 
   const [signUpData, setSignUpData] = useState<ISignUpData>({
-    "username": { value: "", errMsg: "" },
+    username: { value: "", errMsg: "" },
     email: { value: "", errMsg: "" },
     password: { value: "", errMsg: "" }
   })
