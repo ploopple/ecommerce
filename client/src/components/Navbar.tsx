@@ -1,4 +1,4 @@
-import { gql, useMutation, useQuery } from '@apollo/client'
+import { gql, useMutation  } from '@apollo/client'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Cookies from 'universal-cookie'
@@ -18,7 +18,23 @@ import { addToNewProduct } from '../features/dataSlice'
 //     updatedAt
 //   }
 // }`
-
+const GET_ALL_PRODUCTS = gql`
+{
+  GetAllProducts {
+    id
+    name
+    description
+    price
+    stocks
+    userId
+    image
+    createdBy
+    updatedAt
+    createdAt
+   __typename
+  }
+}
+`
 const ADD_NEW_PRODUCT = gql`
 
 mutation CreateNewProduct($req: ProductInput!) {
@@ -33,12 +49,15 @@ mutation CreateNewProduct($req: ProductInput!) {
         createdBy
         createdAt
         updatedAt
+   __typename
     }
   }
 `
 
 const cookie = new Cookies
 const Navbar = () => {
+    // const queryClient = useQueryClient();
+
     const [newProductInputData, setNewProductInputData] = useState<IInputData>({
         name: {value: "", errMsg: ""},
         description: {value: "", errMsg: ""},
@@ -51,20 +70,31 @@ const Navbar = () => {
     const productCart = useSelector((state: RootState) => state.data.cart)
     const dispatch = useDispatch()
     const token = cookie.get("token")
-    const [addNewProductMutation, { data, loading, error }] = useMutation(ADD_NEW_PRODUCT, {
+    const [addNewProductMutation, { loading, error }] = useMutation(ADD_NEW_PRODUCT, {
         context: {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         },
-        // fetchPolicy: "no-cache"
-    });
-    useEffect(() => {
-if(data) {
+        // onCompleted: (data) => {
+        //     console.log(data)
+        // }
+        // update: (cache, {data: {addNewProduct}}) =>     {
+        //     const data: any = cache.readQuery({query: GET_ALL_PRODUCTS})
+        //     // const products = cache.
+        //     console.log(addNewProduct)
+        //     // cache.writeQuery({
+        //     //     query: GET_ALL_PRODUCTS, 
+        //     //     data: { GetAllProducts: [...data.GetAllProducts, newProduct] },
+        //     //     })
+        //     //     data: { GetAllProducts: [...data.GetAllProducts, newProduct] },
+        //     // cache.writeQuery({
+        //     //     query: GET_ALL_PRODUCTS,
+        //     //     data: { GetAllProducts: [...data.GetAllProducts, newProduct] },
+        //     // })
 
-        dispatch(addToNewProduct(data.CreateNewProduct))
-        }
-    }, [data])
+        // }
+    });
     const handleOnLogOut = () => {
         cookie.remove("token")
         window.location.href = "/"
@@ -73,21 +103,12 @@ if(data) {
     const handleOnInputChange = (e: any, target: string) => {
 
         let errMsg = ""
-        // if (target === "username") {
             if(target === "stocks" || target === "price") {
 
             }else {
 
           errMsg = e.target.value.length >= 3 ? "" : target + " must be 3 characters or longer"
             }
-        // } else if (target === "email") {
-        //   errMsg = e.target.value.length >= 8 ? "" : target + " must be 8 characters or longer"
-        //   if (!errMsg) {
-        //     errMsg = isValidEmail(e.target.value) ? "" : target + " must be email"
-        //   }
-        // } else if (target === "password") {
-        //   errMsg = e.target.value.length >= 8 ? "" : target + " must be 8 characters or longer"
-        // }
         setNewProductInputData({
           ...newProductInputData,
           [target]: {
@@ -108,7 +129,16 @@ if(data) {
                     createdBy: newProductInputData.createdBy.value,
                     image: newProductInputData.image.value
                 }
-            }
+            },
+            update:(cache,data,d) => {
+                console.log(cache, data)
+                const products: any = cache.readQuery({query: GET_ALL_PRODUCTS})
+                cache.writeQuery({
+                    query: GET_ALL_PRODUCTS,
+                    data: {GetAllProducts: [...products.GetAllProducts,  data.data.CreateNewProduct]}
+                })
+            },
+            // refetchQueries: [{query: GET_ALL_PRODUCTS}]
         })
         
         setIsAddingNewProduct(false)

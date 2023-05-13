@@ -22,9 +22,6 @@ export class ProductEntity {
     @Field()
     userId: number 
     
-    // @Field()
-    // user: User
-
     @Field()
     image: string
 
