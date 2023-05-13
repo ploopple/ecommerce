@@ -5,24 +5,25 @@ import Loading from '../components/Loading'
 import Navbar from '../components/Navbar'
 import { useDispatch } from 'react-redux'
 import { updateCart } from '../features/dataSlice'
+import { GET_PRODUCT_BY_ID } from '../graphql/queries'
 
-const GET_PRODUCT_BY_ID = gql`
-query GetProductById($id: Float!){
-  GetProductById(productId: $id){
-    id
-    name
-    description
-    createdBy
-    price
-    stocks
-    userId
-    stocks
-    image
-    createdAt
-    updatedAt
-  }
-}
-`
+// const GET_PRODUCT_BY_ID = gql`
+// query GetProductById($id: Float!){
+//   GetProductById(productId: $id){
+//     id
+//     name
+//     description
+//     createdBy
+//     price
+//     stocks
+//     userId
+//     stocks
+//     image
+//     createdAt
+//     updatedAt
+//   }
+// }
+// `
 
 const ProductByIdPage = () => {
   const dispatch = useDispatch()

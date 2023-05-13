@@ -6,23 +6,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../app/store';
 import { Link } from 'react-router-dom';
 import { setAllProducts, updateCart } from '../features/dataSlice';
+import { GET_ALL_PRODUCTS } from '../graphql/queries';
 
-const GET_ALL_PRODUCTS = gql`
-{
-  GetAllProducts {
-    id
-    name
-    description
-    price
-    stocks
-    userId
-    image
-    createdBy
-    updatedAt
-    createdAt
-  }
-}
-`
+// const GET_ALL_PRODUCTS = gql`
+// {
+//   GetAllProducts {
+//     id
+//     name
+//     description
+//     price
+//     stocks
+//     userId
+//     image
+//     createdBy
+//     updatedAt
+//     createdAt
+//   }
+// }
+// `
 
 const HomePage = () => {
   const allProducts = useSelector((state: RootState) => state.data.allProductsData)

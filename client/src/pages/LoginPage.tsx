@@ -5,17 +5,18 @@ import Loading from "../components/Loading";
 import Cookies from 'universal-cookie';
 import { Navigate } from 'react-router-dom';
 import Navbar from "../components/Navbar";
+import { LOGIN_QUERY } from "../graphql/queries";
 
 interface ISignUpData {
   [key: string]: { value: string, errMsg: string }
 }
 
 
-const LOGIN_QUERY= gql`
-  query Login($req: UserInputLogin!) {
-    Login(req: $req)
-  }
-`;
+// const LOGIN_QUERY= gql`
+//   query Login($req: UserInputLogin!) {
+//     Login(req: $req)
+//   }
+// `;
 
 const LoginPage = () => {
 

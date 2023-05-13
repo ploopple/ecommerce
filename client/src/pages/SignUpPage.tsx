@@ -5,17 +5,18 @@ import Loading from "../components/Loading";
 import Cookies from 'universal-cookie';
 import { Navigate } from 'react-router-dom';
 import Navbar from "../components/Navbar";
+import { SIGNUP_MUTATION } from "../graphql/mutations";
 
 interface ISignUpData {
   [key: string]: { value: string, errMsg: string }
 }
 
 
-const SIGNUP_MUTATION = gql`
-  mutation SignUp($req: UserInputSignUp!) {
-    SignUp(req: $req)
-  }
-`;
+// const SIGNUP_MUTATION = gql`
+//   mutation SignUp($req: UserInputSignUp!) {
+//     SignUp(req: $req)
+//   }
+// `;
 
 const SignUpPage = () => {
 

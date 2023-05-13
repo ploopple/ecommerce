@@ -1,70 +1,60 @@
-import { gql, useMutation  } from '@apollo/client'
-import React, { useEffect, useState } from 'react'
+import { gql, useMutation } from '@apollo/client'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Cookies from 'universal-cookie'
 import Loading from './Loading'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../app/store'
 import { IInputData } from '../types'
-import { addToNewProduct } from '../features/dataSlice'
-// const GET_USER_INFO = gql`
-//  {
-//    GetUserInfo {
-//     id
-//     username
-//     email
-//     createdAt
-//     createdAt
-//     updatedAt
-//   }
-// }`
-const GET_ALL_PRODUCTS = gql`
-{
-  GetAllProducts {
-    id
-    name
-    description
-    price
-    stocks
-    userId
-    image
-    createdBy
-    updatedAt
-    createdAt
-   __typename
-  }
-}
-`
-const ADD_NEW_PRODUCT = gql`
+import { ADD_NEW_PRODUCT } from '../graphql/mutations'
+import { GET_ALL_PRODUCTS } from '../graphql/queries'
 
-mutation CreateNewProduct($req: ProductInput!) {
-    CreateNewProduct(req: $req) {
-        id
-        name
-        description
-        price
-        stocks
-        userId
-        image
-        createdBy
-        createdAt
-        updatedAt
-   __typename
-    }
-  }
-`
+// const GET_ALL_PRODUCTS = gql`
+// {
+//   GetAllProducts {
+//     id
+//     name
+//     description
+//     price
+//     stocks
+//     userId
+//     image
+//     createdBy
+//     updatedAt
+//     createdAt
+//    __typename
+//   }
+// }
+// `
+// const ADD_NEW_PRODUCT = gql`
+// mutation CreateNewProduct($req: ProductInput!) {
+//     CreateNewProduct(req: $req) {
+//         id
+//         name
+//         description
+//         price
+//         stocks
+//         userId
+//         image
+//         createdBy
+//         createdAt
+//         updatedAt
+//    __typename
+//     }
+//   }
+// `
 
 const cookie = new Cookies
 const Navbar = () => {
     // const queryClient = useQueryClient();
 
     const [newProductInputData, setNewProductInputData] = useState<IInputData>({
-        name: {value: "", errMsg: ""},
-        description: {value: "", errMsg: ""},
-        price: {value: 0, errMsg: ""},
-        stocks: {value: 0, errMsg: ""},
-        createdBy: {value: "", errMsg: ""},
-        image: {value: "", errMsg: ""},
+        name: { value: "", errMsg: "" },
+        description: { value: "", errMsg: "" },
+        price: { value: 0, errMsg: "" },
+        stocks: { value: 0, errMsg: "" },
+        createdBy: { value: "", errMsg: "" },
+        image: { value: "", errMsg: "" },
     })
     const [isAddingNewProduct, setIsAddingNewProduct] = useState(false)
     const productCart = useSelector((state: RootState) => state.data.cart)
@@ -100,81 +90,129 @@ const Navbar = () => {
         window.location.href = "/"
 
     }
-    const handleOnInputChange = (e: any, target: string) => {
+    const handleOnInputChange = (input: string, target: string) => {
 
         let errMsg = ""
-            if(target === "stocks" || target === "price") {
+        if (target === "stocks" || target === "price") {
 
-            }else {
+        } else {
 
-          errMsg = e.target.value.length >= 3 ? "" : target + " must be 3 characters or longer"
-            }
+            errMsg = input.length >= 3 ? "" : target + " must be 3 characters or longer"
+        }
         setNewProductInputData({
-          ...newProductInputData,
-          [target]: {
-            value: e.target.value,
-            errMsg
-          }
+            ...newProductInputData,
+            [target]: {
+                value: input,
+                errMsg
+            }
         })
-      }
-    const handleOnAddNewProduct = async() => {
+    }
+    const handleOnAddNewProduct = async () => {
+        console.log(123)
+        // handleOnInputChange(newProductInputData.image.value+"","image")
+        // handleOnInputChange(newProductInputData.createdBy.value+"","createdBy")
+        // handleOnInputChange(newProductInputData.description.value+"","description")
+        // handleOnInputChange(newProductInputData.name.value+"","name")
+        if (
+            newProductInputData.name.value &&
+            newProductInputData.description.value &&
+            newProductInputData.createdBy.value &&
+            newProductInputData.image.value
+        ) {
 
-        await addNewProductMutation({
-            variables: {
-                req: {
-                    name: newProductInputData.name.value,
-                    description: newProductInputData.description.value,
-                    price: +newProductInputData.price.value,
-                    stocks: +newProductInputData.stocks.value,
-                    createdBy: newProductInputData.createdBy.value,
-                    image: newProductInputData.image.value
-                }
-            },
-            update:(cache,data,d) => {
-                console.log(cache, data)
-                const products: any = cache.readQuery({query: GET_ALL_PRODUCTS})
-                cache.writeQuery({
-                    query: GET_ALL_PRODUCTS,
-                    data: {GetAllProducts: [...products.GetAllProducts,  data.data.CreateNewProduct]}
-                })
-            },
-            // refetchQueries: [{query: GET_ALL_PRODUCTS}]
-        })
-        
+            await addNewProductMutation({
+                variables: {
+                    req: {
+                        name: newProductInputData.name.value,
+                        description: newProductInputData.description.value,
+                        price: +newProductInputData.price.value,
+                        stocks: +newProductInputData.stocks.value,
+                        createdBy: newProductInputData.createdBy.value,
+                        image: newProductInputData.image.value
+                    }
+                },
+                update: (cache, data) => {
+                    console.log(cache, data)
+                    const products: any = cache.readQuery({ query: GET_ALL_PRODUCTS })
+                    cache.writeQuery({
+                        query: GET_ALL_PRODUCTS,
+                        data: { GetAllProducts: [...products.GetAllProducts, data.data.CreateNewProduct] }
+                    })
+                },
+                // refetchQueries: [{query: GET_ALL_PRODUCTS}]
+            })
+
+            setIsAddingNewProduct(false)
+            const temp = newProductInputData
+            temp.name.value = ""
+            temp.name.errMsg = ""
+            temp.description.value = ""
+            temp.description.errMsg = ""
+            temp.image.value = ""
+            temp.image.errMsg = ""
+            temp.price.value = 0
+            temp.price.errMsg = ""
+            temp.stocks.value = 0
+            temp.stocks.errMsg = ""
+            temp.createdBy.value = ""
+            temp.createdBy.errMsg = ""
+            setNewProductInputData(temp)
+        }
+    }
+    const handleOnCloseAddNewProduct = () => {
         setIsAddingNewProduct(false)
+        const temp = newProductInputData
+        temp.name.value = ""
+        temp.name.errMsg = ""
+        temp.description.value = ""
+        temp.description.errMsg = ""
+        temp.image.value = ""
+        temp.image.errMsg = ""
+        temp.price.value = 0
+        temp.price.errMsg = ""
+        temp.stocks.value = 0
+        temp.stocks.errMsg = ""
+        temp.createdBy.value = ""
+        temp.createdBy.errMsg = ""
+        setNewProductInputData(temp)
     }
     if (loading) {
         return <Loading />
     }
 
     // console.log(data)
+    const isDissableAddNewProductBtn: boolean =
+        newProductInputData.name.value.toString().length < 3 ||
+        newProductInputData.description.value.toString().length < 3 ||
+        newProductInputData.createdBy.value.toString().length < 3 ||
+        newProductInputData.image.value.toString().length < 3
     return (
         <div className='flex justify-between w-full h-[6vh] items-center border-b-2'>
             {isAddingNewProduct ? (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50  overflow-auto">
                     <div className="w-2/5 max-h-[98%] overflow-auto bg-white rounded-xl flex flex-col p-4">
                         <div>
-                            <button onClick={() => setIsAddingNewProduct(false)} className='float-right text-red-500'>X</button>
+                            <button onClick={handleOnCloseAddNewProduct} className='float-right text-red-500'>X</button>
                         </div>
                         <label htmlFor="">Name</label>
-                        <input type="text" className='bg-gray-200 rounded-lg h-8 p-2 my-2' onChange={e => handleOnInputChange(e, "name")} value={newProductInputData.name.value} />
+                        <input type="text" className='bg-gray-200 rounded-lg h-8 p-2 my-2' onChange={e => handleOnInputChange(e.target.value, "name")} value={newProductInputData.name.value} />
                         <p className="text-red-400 text-sm">{newProductInputData.name.errMsg}</p>
                         <label htmlFor="">description</label>
-                        <input type="text" className='bg-gray-200 rounded-lg h-8 p-2 my-2' onChange={e => handleOnInputChange(e, "description")} value={newProductInputData.description.value} />
+                        <input type="text" className='bg-gray-200 rounded-lg h-8 p-2 my-2' onChange={e => handleOnInputChange(e.target.value, "description")} value={newProductInputData.description.value} />
                         <p className="text-red-400 text-sm">{newProductInputData.description.errMsg}</p>
                         <label htmlFor="">price</label>
-                        <input type="number" className='bg-gray-200 rounded-lg h-8 p-2 my-2' onChange={e => handleOnInputChange(e, "price")} value={newProductInputData.price.value} />
+                        <input type="number" className='bg-gray-200 rounded-lg h-8 p-2 my-2' onChange={e => handleOnInputChange(e.target.value, "price")} value={newProductInputData.price.value} />
                         <p className="text-red-400 text-sm">{newProductInputData.price.errMsg}</p>
                         <label htmlFor="">stocks</label>
-                        <input type="number" className='bg-gray-200 rounded-lg h-8 p-2 my-2' onChange={e => handleOnInputChange(e, "stocks")} value={newProductInputData.stocks.value} />
+                        <input type="number" className='bg-gray-200 rounded-lg h-8 p-2 my-2' onChange={e => handleOnInputChange(e.target.value, "stocks")} value={newProductInputData.stocks.value} />
                         <p className="text-red-400 text-sm">{newProductInputData.stocks.errMsg}</p>
                         <label htmlFor="">created By</label>
-                        <input type="text" className='bg-gray-200 rounded-lg h-8 p-2 my-2' onChange={e => handleOnInputChange(e, "createdBy")} value={newProductInputData.createdBy.value} />
+                        <input type="text" className='bg-gray-200 rounded-lg h-8 p-2 my-2' onChange={e => handleOnInputChange(e.target.value, "createdBy")} value={newProductInputData.createdBy.value} />
                         <p className="text-red-400 text-sm">{newProductInputData.createdBy.errMsg}</p>
                         <label htmlFor="">image</label>
-                        <input type="text" className='bg-gray-200 rounded-lg h-8 p-2 my-2' onChange={e => handleOnInputChange(e, "image")} value={newProductInputData.image.value} />
+                        <input type="text" className='bg-gray-200 rounded-lg h-8 p-2 my-2' onChange={e => handleOnInputChange(e.target.value, "image")} value={newProductInputData.image.value} />
                         <p className="text-red-400 text-sm">{newProductInputData.image.errMsg}</p>
-                        <button onClick={handleOnAddNewProduct} className='bg-red-600 text-white py-2 rounded-xl mt-2'>Add new Product</button>
+                        <button disabled={isDissableAddNewProductBtn} onClick={handleOnAddNewProduct} className={`${isDissableAddNewProductBtn ? "bg-red-300" : "bg-red-600"}  text-white py-2 rounded-xl mt-2`}>Add new Product</button>
                     </div>
                 </div>
 

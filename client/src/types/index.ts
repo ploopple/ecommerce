@@ -24,19 +24,3 @@ export interface IInputData {
   [key: string]: { value: string | number, errMsg: string }
 }
 
-
-/*
-{
-    "id": 5,
-    "name": "qdwe",
-    "description": "fsdf sdfsd",
-    "price": 42,
-    "stocks": 12,
-    "userId": 4,
-    "image": "fsdfsdfsdf",
-    "createdBy": "fasdf",
-    "updatedAt": "2023-05-10T12:15:59.423Z",
-    "createdAt": "2023-05-10T12:15:59.423Z",
-    "__typename": "ProductEntity"
-}
-*/
