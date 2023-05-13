@@ -1,13 +1,14 @@
+import { IProductData, IUserData } from './../types/index';
 import { createSlice } from "@reduxjs/toolkit"
 
 interface IInitialState {
-    userData: any
-    allProductsData: any[]
-    cart: any[]
+    userData: IUserData | null
+    allProductsData: IProductData[]
+    cart: {quantity: number, product: IProductData}[]
 }
 
 const initialState: IInitialState = {
-    userData: {},
+    userData: null,
     allProductsData: [],
     cart: []
 }
@@ -43,7 +44,6 @@ const dataSlice = createSlice({
             console.log(state.cart[i].product.stocks ,  state.cart[i].quantity)
             if(state.cart[i].product.stocks >  state.cart[i].quantity) {
             state.cart[i].quantity += 1
-                // state.cart.splice(i,1)
             }
         }
     }

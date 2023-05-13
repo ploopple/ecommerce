@@ -48,17 +48,17 @@ const Navbar = () => {
                 {/* {!loading && data && data.GetUserInfo ? ( */}
                 {token ? (
                     <>
-                        <li className='mx-20'>
-                            <Link to={"/cart"}>Cart {productCart.length ? productCart.length : "empty" }</Link>
+                        <li className='mx-5'>
+                            <Link to={"/cart"}>Cart {productCart.length ? productCart.length : "" }</Link>
                         </li>
-                        <li className='mx-20' onClick={handleOnLogOut}>Logout</li>
+                        <li className='mx-5 cursor-pointer' onClick={handleOnLogOut}>Logout</li>
                     </>
                 ) : (
                     <>
                         <li>
                             <Link to={"/login"}>Login</Link>
                         </li>
-                        <li className='mx-1 2'>
+                        <li className='mx-10'>
                             <Link to={"/signUp"}>SignUp</Link>
                         </li>
                     </>
