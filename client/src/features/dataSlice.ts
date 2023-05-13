@@ -47,6 +47,7 @@ const dataSlice = createSlice({
             }
         },
         addToNewProduct(state, {payload}){
+            console.log(payload)
             state.allProductsData.push(payload)
         }
     }

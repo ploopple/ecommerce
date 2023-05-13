@@ -1,5 +1,5 @@
 import { gql, useMutation, useQuery } from '@apollo/client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Cookies from 'universal-cookie'
 import Loading from './Loading'
@@ -59,6 +59,12 @@ const Navbar = () => {
         },
         // fetchPolicy: "no-cache"
     });
+    useEffect(() => {
+if(data) {
+
+        dispatch(addToNewProduct(data.CreateNewProduct))
+        }
+    }, [data])
     const handleOnLogOut = () => {
         cookie.remove("token")
         window.location.href = "/"
@@ -104,16 +110,14 @@ const Navbar = () => {
                 }
             }
         })
-        if(data) {
-
-        dispatch(addToNewProduct(data.CreateNewProduct))
-        }
+        
         setIsAddingNewProduct(false)
     }
     if (loading) {
         return <Loading />
     }
-    console.log(data)
+
+    // console.log(data)
     return (
         <div className='flex justify-between w-full h-[6vh] items-center border-b-2'>
             {isAddingNewProduct ? (
