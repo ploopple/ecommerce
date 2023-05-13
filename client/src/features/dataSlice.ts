@@ -45,10 +45,13 @@ const dataSlice = createSlice({
             if(state.cart[i].product.stocks >  state.cart[i].quantity) {
             state.cart[i].quantity += 1
             }
+        },
+        addToNewProduct(state, {payload}){
+            state.allProductsData.push(payload)
         }
     }
 })
 
-export const { setUser, setAllProducts, updateCart, subtractFromCart, addToCart } = dataSlice.actions
+export const { setUser, setAllProducts, updateCart, subtractFromCart, addToCart, addToNewProduct } = dataSlice.actions
 
 export default dataSlice.reducer

@@ -20,6 +20,10 @@ export interface IProductData {
     createdAt: Date
     updatedAt: Date
 }
+export interface IInputData {
+  [key: string]: { value: string | number, errMsg: string }
+}
+
 
 /*
 {
