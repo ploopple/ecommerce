@@ -6,9 +6,11 @@ import Cookies from 'universal-cookie';
 import { Navigate } from 'react-router-dom';
 import { LOGIN_QUERY } from "../graphql/queries";
 import { ILoginData } from "../types";
+import { useDispatch } from "react-redux";
+import { setUser } from "../features/dataSlice";
 
 const LoginPage = () => {
-
+  const dispatch = useDispatch()
     const cookies = new Cookies();
   const [ loginQuery,{ data, loading, error }] = useLazyQuery(LOGIN_QUERY);
 
@@ -61,7 +63,8 @@ const LoginPage = () => {
     }
   if(!loading && !error && data && data.Login) {
       cookies.set("token",data.Login)
-    return <Navigate to="/cart"/>
+      dispatch(setUser(data.Login))
+    return <Navigate to="/"/>
   }
   return (
 <>

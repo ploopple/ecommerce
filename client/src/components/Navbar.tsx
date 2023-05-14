@@ -125,6 +125,9 @@ const Navbar = () => {
         newProductInputData.description.value.toString().length < 3 ||
         newProductInputData.createdBy.value.toString().length < 3 ||
         newProductInputData.image.value.toString().length < 3
+
+
+    console.log(userData)
     return (
         <div className='flex justify-between w-full h-[6vh] items-center border-b-2'>
             {isAddingNewProduct ? (

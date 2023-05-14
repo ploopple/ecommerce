@@ -1,5 +1,5 @@
 import { FC } from "react"
-import { gql, useQuery } from "@apollo/client"
+import { useQuery } from "@apollo/client"
 import Cookies from "universal-cookie"
 import Loading from "./components/Loading"
 import { Navigate } from "react-router-dom"
@@ -9,13 +9,12 @@ import { GET_USER_INFO } from "./graphql/queries"
 
 interface IPrivateRoutes {
     isPrivate: boolean
+    url: string
     children: JSX.Element
 }
 
-
-
 const cookie = new Cookies
-const PrivateRoutes: FC<IPrivateRoutes> = ({ isPrivate, children }) => {
+const PrivateRoutes: FC<IPrivateRoutes> = ({ isPrivate,url, children }) => {
     const dispatch = useDispatch()
     const token = cookie.get("token")
     if (!token && !isPrivate) {
@@ -38,6 +37,7 @@ const PrivateRoutes: FC<IPrivateRoutes> = ({ isPrivate, children }) => {
         return <Loading />
     }
 
+    if(url === "homePage") return children
     if (error) {
         cookie.remove("token")
         dispatch(setUser(""))

@@ -14,10 +14,10 @@ function App() {
       <Navbar/>
       <main className='w-full h-[94vh]'>
         <Routes>
-          <Route path='' element={<HomePage />} />
-          <Route path='login' element={<PrivateRoutes isPrivate={false}><LoginPage /></PrivateRoutes>} />
-          <Route path='signUp' element={<PrivateRoutes isPrivate={false}><SignUpPage /></PrivateRoutes>} />
-          <Route path='cart' element={<PrivateRoutes isPrivate={true}><CartPage /></PrivateRoutes>} />
+          <Route path='' element={<PrivateRoutes url='homePage' isPrivate={!false}><HomePage /></PrivateRoutes>} />
+          <Route path='login' element={<PrivateRoutes url='loginPage' isPrivate={false}><LoginPage /></PrivateRoutes>} />
+          <Route path='signUp' element={<PrivateRoutes url='signUpPage' isPrivate={false}><SignUpPage /></PrivateRoutes>} />
+          <Route path='cart' element={<PrivateRoutes url='cartPage' isPrivate={true}><CartPage /></PrivateRoutes>} />
           <Route path='product/:productId' element={<ProductByIdPage />} />
           <Route path='*' element={<NotFound />} />
         </Routes>

@@ -3,13 +3,16 @@ import { isValidEmail } from "../components/isValidEmail"
 import { gql, useMutation, useQuery } from "@apollo/client";
 import Loading from "../components/Loading";
 import Cookies from 'universal-cookie';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import Navbar from "../components/Navbar";
 import { SIGNUP_MUTATION } from "../graphql/mutations";
 import { ISignUpData } from "../types";
+import { setUser } from "../features/dataSlice";
+import { useDispatch } from "react-redux";
 
 const SignUpPage = () => {
 
+  const dispatch = useDispatch()
     const cookies = new Cookies();
   const [signUpMutation, { data, loading, error }] = useMutation(SIGNUP_MUTATION);
 
@@ -64,7 +67,8 @@ const SignUpPage = () => {
     }
   if(!loading && !error && data && data.SignUp) {
       cookies.set("token",data.SignUp)
-    return <Navigate to="/cart"/>
+      dispatch(setUser(data.SignUp))
+    return <Navigate to="/"/>
   }
   return (
 <>
