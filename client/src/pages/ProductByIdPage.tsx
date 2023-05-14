@@ -210,20 +210,24 @@ const [deleteProductMutation, { data: deleteMutationData, loading: deleteMutatio
               <button
                 className="w-full bg-blue-600 hover:bg-blue-800 my-2 text-white font-bold py-2 px-4 rounded-lg focus:outline-none"
                 onClick={() => dispatch(updateCart({ product, quantity }))}>
-                Add to Cart
-              </button>
-              <button
-                className="w-full bg-yellow-500 hover:bg-orange-300 my-2 text-white font-bold py-2 px-4 rounded-lg focus:outline-none"
-                onClick={() => setIsUpdatingProduct(true)}>
-                Update
-              </button>
-              <button
-                className="w-full bg-red-500 hover:bg-red-300 my-2 text-white font-bold py-2 px-4 rounded-lg focus:outline-none"
-                onClick={handleOnClickDeleteBtn}>
+              Add to Cart
+            </button>
+            {product.userId === userData?.id ? (
+              <>
+                <button
+                  className="w-full bg-yellow-500 hover:bg-orange-300 my-2 text-white font-bold py-2 px-4 rounded-lg focus:outline-none"
+                  onClick={() => setIsUpdatingProduct(true)}>
+                  Update
+                </button>
+                <button
+                  className="w-full bg-red-500 hover:bg-red-300 my-2 text-white font-bold py-2 px-4 rounded-lg focus:outline-none"
+                  onClick={handleOnClickDeleteBtn}>
                   Delete
-              </button>
-            </div>
+                </button>
+              </>
+            ) : null}
           </div>
+        </div>
         </div>
     </>
   )
