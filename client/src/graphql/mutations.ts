@@ -39,3 +39,9 @@ mutation UpdateProductById($id: Float!, $req: ProductInput!) {
   }
 }
 `
+
+export const DELETE_PRODUCT_BY_ID = gql`
+mutation DeleteProductById($id: Float!){
+  DeleteProductById(productId: $id) 
+}
+`

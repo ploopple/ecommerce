@@ -36,7 +36,7 @@ export class ProductResolver {
 
     @UseGuards(new AuthGuard())
     @Mutation(() => String)
-    DeleteProductById(@Context('user') userId: number, @Args('productId') productId: number) {
-        return this.productService.deleteProductById(productId, +userId)
+    DeleteProductById(@Context('user') userId: any, @Args('productId') productId: number) {
+        return this.productService.deleteProductById(productId, +userId.userId)
     }
 }

@@ -5,9 +5,9 @@ import Loading from '../components/Loading'
 import Navbar from '../components/Navbar'
 import { useDispatch } from 'react-redux'
 import { updateCart } from '../features/dataSlice'
-import { GET_PRODUCT_BY_ID } from '../graphql/queries'
+import { GET_ALL_PRODUCTS, GET_PRODUCT_BY_ID } from '../graphql/queries'
 import { IProductData, IProductInputData } from '../types'
-import { UPDATE_PRODUCT_BY_PRODUCTID } from '../graphql/mutations'
+import { DELETE_PRODUCT_BY_ID, UPDATE_PRODUCT_BY_PRODUCTID } from '../graphql/mutations'
 import Cookies from 'universal-cookie'
 
 // const GET_PRODUCT_BY_ID = gql`
@@ -31,20 +31,27 @@ import Cookies from 'universal-cookie'
 const cookie = new Cookies()
 const ProductByIdPage = () => {
   const token = cookie.get("token")
-  const [updateProductMutation, { data: mutationData, loading: mutationLoading,error:mutationError}] = useMutation(UPDATE_PRODUCT_BY_PRODUCTID, {
-context: {
+  const [updateProductMutation, { data: mutationData, loading: mutationLoading, error: mutationError }] = useMutation(UPDATE_PRODUCT_BY_PRODUCTID, {
+    context: {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  })
+const [deleteProductMutation, { data: deleteMutationData, loading: deleteMutationLoading, error: deleteMutationError }] = useMutation(DELETE_PRODUCT_BY_ID, {
+    context: {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     },
   })
   const [updateProductInputData, setUpdateProductInputData] = useState<IProductInputData>({
-    name: {value: "", errMsg: ""},
-    description: {value: "", errMsg: ""},
-    createdBy: {value: "", errMsg: ""},
-    image: {value: "", errMsg: ""},
-    price: {value: 0, errMsg: ""},
-    stocks: {value: 0, errMsg: ""},
+    name: { value: "", errMsg: "" },
+    description: { value: "", errMsg: "" },
+    createdBy: { value: "", errMsg: "" },
+    image: { value: "", errMsg: "" },
+    price: { value: 0, errMsg: "" },
+    stocks: { value: 0, errMsg: "" },
   })
   const dispatch = useDispatch()
   const [isUpdatingProduct, setIsUpdatingProduct] = useState(false)
@@ -53,26 +60,27 @@ context: {
   const { productId } = useParams()
   console.log(token)
   const { data, loading, error } = useQuery<{ GetProductById: IProductData }>(GET_PRODUCT_BY_ID, {
-    
     variables: {
       id: productId && +productId
     }
   });
+
   useEffect(() => {
+
     if (data) {
       setProduct(data.GetProductById)
       setUpdateProductInputData({
-        name: {value: data.GetProductById.name, errMsg: ""},
-        description: {value: data.GetProductById.description, errMsg: ""},
-        createdBy: {value: data.GetProductById.createdBy, errMsg: ""},
-        price: {value: data.GetProductById.price, errMsg: ""},
-        stocks: {value: data.GetProductById.stocks, errMsg: ""},
-        image: {value: data.GetProductById.image, errMsg: ""},
+        name: { value: data.GetProductById.name, errMsg: "" },
+        description: { value: data.GetProductById.description, errMsg: "" },
+        createdBy: { value: data.GetProductById.createdBy, errMsg: "" },
+        price: { value: data.GetProductById.price, errMsg: "" },
+        stocks: { value: data.GetProductById.stocks, errMsg: "" },
+        image: { value: data.GetProductById.image, errMsg: "" },
       })
       console.log(updateProductInputData)
     }
   }, [data])
-  if (loading || mutationLoading) {
+  if (loading || mutationLoading || deleteMutationLoading) {
     return <Loading />
   }
 
@@ -86,65 +94,73 @@ context: {
       setQuantity(quantity - 1)
     }
   }
- const handleOnInputChange = (input: string, target: string) => {
+  const handleOnInputChange = (input: string, target: string) => {
 
-        let errMsg = ""
-        if (target === "stocks" || target === "price") {
+    let errMsg = ""
+    if (target === "stocks" || target === "price") {
 
-        } else {
+    } else {
 
-            errMsg = input.length >= 3 ? "" : target + " must be 3 characters or longer"
+      errMsg = input.length >= 3 ? "" : target + " must be 3 characters or longer"
+    }
+    setUpdateProductInputData({
+      ...updateProductInputData,
+      [target]: {
+        value: input,
+        errMsg
+      }
+    })
+  }
+  const handleOnCloseUpdateProduct = () => {
+    setUpdateProductInputData({
+      name: { value: product.name, errMsg: "" },
+      description: { value: product.description, errMsg: "" },
+      createdBy: { value: product.createdBy, errMsg: "" },
+      price: { value: product.price, errMsg: "" },
+      stocks: { value: product.stocks, errMsg: "" },
+      image: { value: product.image, errMsg: "" },
+    })
+    setIsUpdatingProduct(false)
+  }
+  const isDissableUpdateProductBtn: boolean =
+    updateProductInputData.name.value.toString().length < 3 ||
+    updateProductInputData.description.value.toString().length < 3 ||
+    updateProductInputData.createdBy.value.toString().length < 3 ||
+    updateProductInputData.image.value.toString().length < 3
+  const handleOnUpdateProduct = () => {
+    updateProductMutation({
+      variables: {
+        id: Number(productId),
+        req: {
+          name: updateProductInputData.name.value,
+          description: updateProductInputData.description.value,
+          createdBy: updateProductInputData.createdBy.value,
+          image: updateProductInputData.image.value,
+          price: Number(updateProductInputData.price.value),
+          stocks: Number(updateProductInputData.stocks.value)
         }
-        setUpdateProductInputData({
-            ...updateProductInputData,
-            [target]: {
-                value: input,
-                errMsg
-            }
+      },
+      update: (cache, data) => {
+        console.log(cache, data)
+        // const prod: any = cache.readQuery({ query: GET_PRODUCT_BY_ID })
+        cache.writeQuery({
+          query: GET_PRODUCT_BY_ID,
+          data: { GetProductById: [data.data.UpdateProductById] }
         })
-    }
-    const handleOnCloseUpdateProduct = () => {
-      setUpdateProductInputData({
-        name: {value: product.name, errMsg: ""},
-        description: {value: product.description, errMsg: ""},
-        createdBy: {value: product.createdBy, errMsg: ""},
-        price: {value: product.price, errMsg: ""},
-        stocks: {value: product.stocks, errMsg: ""},
-        image: {value: product.image, errMsg: ""},
-      })
-      setIsUpdatingProduct(false)
-    }
-const isDissableUpdateProductBtn: boolean =
-        updateProductInputData.name.value.toString().length < 3 ||
-        updateProductInputData.description.value.toString().length < 3 ||
-        updateProductInputData.createdBy.value.toString().length < 3 ||
-        updateProductInputData.image.value.toString().length < 3
-    const handleOnUpdateProduct = () => {
-      updateProductMutation({
-        variables: {
-          id: Number(productId),
-          req: {
-            name: updateProductInputData.name.value,
-            description: updateProductInputData.description.value,
-            createdBy: updateProductInputData.createdBy.value,
-            image: updateProductInputData.image.value,
-            price: Number(updateProductInputData.price.value),
-            stocks: Number(updateProductInputData.stocks.value)
-          }
-        },
-update: (cache, data) => {
-                    console.log(cache, data)
-                    // const prod: any = cache.readQuery({ query: GET_PRODUCT_BY_ID })
-                    cache.writeQuery({
-                        query: GET_PRODUCT_BY_ID,
-                        data: { GetProductById: [data.data.UpdateProductById] }
-                    })
-                }
-        // refetchQueries: [{query: GET_PRODUCT_BY_ID}]
-      })
-      setIsUpdatingProduct(false)
-
-    }
+      }
+      // refetchQueries: [{query: GET_PRODUCT_BY_ID}]
+    })
+    setIsUpdatingProduct(false)
+  }
+  const handleOnClickDeleteBtn = () => {
+    deleteProductMutation({
+      variables: {
+        id: Number(productId)
+      },
+      refetchQueries: [{query: GET_ALL_PRODUCTS}]
+    })
+    window.location.href ="/"
+  }
   return (
     <>
       <Navbar />
@@ -179,7 +195,6 @@ update: (cache, data) => {
                 alt="Product Image"
                 className="w-500 rounded-lg m-auto"
               />
-              <button onClick={() => setIsUpdatingProduct(true)}>Update</button>
             </div>
             <div className="w-full">
               <h1 className="text-4xl font-bold text-gray-800 mb-4">{product.name}</h1>
@@ -190,7 +205,7 @@ update: (cache, data) => {
                 <div className="flex items-center mt-1">
                   <button
                     className="w-6 h-6 bg-gray-200 text-gray-600 rounded-full focus:outline-none"
-onClick={handleOnSubtractQuantity}
+                    onClick={handleOnSubtractQuantity}
                   >
                     -
                   </button>
@@ -204,11 +219,19 @@ onClick={handleOnSubtractQuantity}
                 </div>
               </div>
               <button
-                className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none"
-
-               onClick={() => dispatch(updateCart({product, quantity}))}
-              >
+                className="w-full bg-blue-600 hover:bg-blue-800 my-2 text-white font-bold py-2 px-4 rounded-lg focus:outline-none"
+                onClick={() => dispatch(updateCart({ product, quantity }))}>
                 Add to Cart
+              </button>
+              <button
+                className="w-full bg-yellow-500 hover:bg-orange-300 my-2 text-white font-bold py-2 px-4 rounded-lg focus:outline-none"
+                onClick={() => setIsUpdatingProduct(true)}>
+                Update
+              </button>
+              <button
+                className="w-full bg-red-500 hover:bg-red-300 my-2 text-white font-bold py-2 px-4 rounded-lg focus:outline-none"
+                onClick={handleOnClickDeleteBtn}>
+                  Delete
               </button>
             </div>
           </div>
