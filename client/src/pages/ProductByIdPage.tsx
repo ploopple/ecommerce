@@ -47,7 +47,7 @@ context: {
     stocks: {value: 0, errMsg: ""},
   })
   const dispatch = useDispatch()
-  const [isUpdatingProduct, setIsUpdatingProduct] = useState(true)
+  const [isUpdatingProduct, setIsUpdatingProduct] = useState(false)
   const [quantity, setQuantity] = useState(1)
   const [product, setProduct] = useState<any>({})
   const { productId } = useParams()
@@ -170,14 +170,14 @@ update: (cache, data) => {
           </div>
         </div>
       ) : null}
-      <main className="bg-gray-100">
+      <main className="bg-gray-100 h-[94vh]">
         <div className="container mx-auto px-4 py-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="w-full">
               <img
-                src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.qcReVnSVjwqWYRhMuEiuqwHaHa%26pid%3DApi&f=1&ipt=648a966b913977453c901fac4464dbd74745755bd70cbc3ef83b3b586e1c3110&ipo=images"
+                src={product.image}
                 alt="Product Image"
-                className="w-full rounded-lg"
+                className="w-500 rounded-lg m-auto"
               />
               <button onClick={() => setIsUpdatingProduct(true)}>Update</button>
             </div>

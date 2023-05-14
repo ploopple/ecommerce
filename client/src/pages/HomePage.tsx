@@ -53,7 +53,7 @@ const HomePage = () => {
         <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden">
           <Link to={"/product/"+product.id} className="block">
             <img
-              src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.qcReVnSVjwqWYRhMuEiuqwHaHa%26pid%3DApi&f=1&ipt=648a966b913977453c901fac4464dbd74745755bd70cbc3ef83b3b586e1c3110&ipo=images"
+              src={product.image}
               alt="Product Image"
               className="w-full"
             />

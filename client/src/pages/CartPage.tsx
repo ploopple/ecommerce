@@ -104,9 +104,8 @@ const CartPage = () => {
                         {/* <div className="mr-4"> */}
 
                         <img
-                          // width={1000}
-                          src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.qcReVnSVjwqWYRhMuEiuqwHaHa%26pid%3DApi&f=1&ipt=648a966b913977453c901fac4464dbd74745755bd70cbc3ef83b3b586e1c3110&ipo=images"
                           alt="Product image"
+                          src={p.product.image}
                           className="w-20 mr-2 rounded-lg bg-emerald-200"
                         />
                         {/* </div> */}
