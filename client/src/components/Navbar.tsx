@@ -13,7 +13,6 @@ import { IProductInputData } from '../types'
 const cookie = new Cookies
 const Navbar = () => {
     const token = cookie.get("token")
-
     const [newProductInputData, setNewProductInputData] = useState<IProductInputData>({
         name: { value: "", errMsg: "" },
         description: { value: "", errMsg: "" },

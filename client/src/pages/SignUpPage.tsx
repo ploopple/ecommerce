@@ -11,9 +11,8 @@ import { setUser } from "../features/dataSlice";
 import { useDispatch } from "react-redux";
 
 const SignUpPage = () => {
-
   const dispatch = useDispatch()
-    const cookies = new Cookies();
+  const cookies = new Cookies();
   const [signUpMutation, { data, loading, error }] = useMutation(SIGNUP_MUTATION);
 
   const [signUpData, setSignUpData] = useState<ISignUpData>({
