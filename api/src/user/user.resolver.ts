@@ -13,7 +13,6 @@ export class UserResolver {
     @UseGuards(new AuthGuard())
     @Query(() => UserEntity)
     GetUserInfo(@Context('user') user: any) {
-        console.log(user)
         return this.userService.getUserInfo(+user.userId)
     }
 

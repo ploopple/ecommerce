@@ -1,8 +1,6 @@
 import { Injectable, ForbiddenException } from '@nestjs/common';
 import { PrismaClient, User } from '@prisma/client';
 import { ProductInput } from './dto/product.input';
-import { ProductEntity } from './dto/product.entity';
-import { UserEntity } from 'src/user/dto/user.entity';
 
 @Injectable()
 export class ProductService {
@@ -12,14 +10,12 @@ export class ProductService {
     async createNewProduct(userId: number, req: ProductInput) {
         try {
             userId = +userId
-            // const user: User = await this.prisma.user.findFirst({where: {id: userId}})
             return await this.prisma.product.create({
                 data:{
                     name: req.name,
                     createdBy: req.createdBy,
                     image: req.image,
                     description: req.description,
-                    // user,
                     userId,
                     price: req.price,
                     stocks: req.stocks
@@ -47,9 +43,7 @@ export class ProductService {
     }
 
 
-    //update
     async updateProductById(productId: number, userId: number, req: ProductInput) {
-            console.log(req)
         try{
             const product = await this.prisma.product.findFirstOrThrow({where: {id: productId}})
             if(product.userId !== userId) {
@@ -67,7 +61,6 @@ export class ProductService {
                 }
             })
 
-            // return product
         }catch(err) {
             throw err
         }
@@ -76,7 +69,6 @@ export class ProductService {
     async deleteProductById(productId: number, userId: number) {
         try{
             const product = await this.prisma.product.findFirstOrThrow({where: {id: productId}})
-            console.log(product.userId !== userId)
             if(product.userId !== userId) {
                 throw new ForbiddenException("product does not belong to you")
             }

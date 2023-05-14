@@ -27,7 +27,6 @@ export class UserService {
                     hashPassword: hashPassword,
                 }
             })
-            console.log(user.id)
             return this.createJWTToken(user.id + "")
         } catch (err) {
             return err

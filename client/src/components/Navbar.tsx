@@ -73,7 +73,6 @@ const Navbar = () => {
                     }
                 },
                 update: (cache, data) => {
-                    console.log(cache, data)
                     const products: any = cache.readQuery({ query: GET_ALL_PRODUCTS })
                     cache.writeQuery({
                         query: GET_ALL_PRODUCTS,
@@ -126,7 +125,6 @@ const Navbar = () => {
         newProductInputData.image.value.toString().length < 3
 
 
-    console.log(userData)
     return (
         <div className='flex justify-between w-full h-[6vh] items-center border-b-2'>
             {isAddingNewProduct ? (

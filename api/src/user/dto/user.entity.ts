@@ -16,9 +16,6 @@ export class UserEntity {
     @Field()
     hashPassword: string
 
-    // @Field()
-    // products: any
-
     @Field()
     createdAt: Date 
 

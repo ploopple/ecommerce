@@ -22,7 +22,6 @@ const dataSlice = createSlice({
         },
         setAllProducts(state, {payload}) {
             state.allProductsData = payload
-            // console.log(payload)
         },
         updateCart(state, {payload}){
             const i = state.cart.findIndex(item => item.product.id === payload.product.id)
@@ -41,13 +40,11 @@ const dataSlice = createSlice({
         },
         addToCart(state, {payload}){
             const i = state.cart.findIndex(item => item.product.id === payload)
-            console.log(state.cart[i].product.stocks ,  state.cart[i].quantity)
             if(state.cart[i].product.stocks >  state.cart[i].quantity) {
             state.cart[i].quantity += 1
             }
         },
         addToNewProduct(state, {payload}){
-            console.log(payload)
             state.allProductsData.push(payload)
         }
     }

@@ -43,7 +43,6 @@ const [deleteProductMutation, { data: deleteMutationData, loading: deleteMutatio
   const [quantity, setQuantity] = useState(1)
   const [product, setProduct] = useState<any>({})
   const { productId } = useParams()
-  console.log(token)
   const { data, loading, error } = useQuery<{ GetProductById: IProductData }>(GET_PRODUCT_BY_ID, {
     variables: {
       id: productId && +productId
@@ -144,7 +143,6 @@ const [deleteProductMutation, { data: deleteMutationData, loading: deleteMutatio
       },
     })
   }
-  console.log(productId, userData?.id)
   return (
     <>
       {isUpdatingProduct ? (

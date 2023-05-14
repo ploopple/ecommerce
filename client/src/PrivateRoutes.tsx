@@ -32,7 +32,6 @@ const PrivateRoutes: FC<IPrivateRoutes> = ({ isPrivate,url, children }) => {
         fetchPolicy: "no-cache"
     });
 
-    console.log(data)
     if (loading) {
         return <Loading />
     }

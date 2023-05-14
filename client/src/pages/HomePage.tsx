@@ -19,7 +19,6 @@ const HomePage = () => {
   if (loading) {
     return <Loading />
   }
-  console.log(allProducts)
 
   return (
     <>

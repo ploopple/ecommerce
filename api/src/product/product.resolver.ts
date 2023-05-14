@@ -30,7 +30,6 @@ export class ProductResolver {
     @UseGuards(new AuthGuard())
     @Mutation(() => ProductEntity)
     UpdateProductById(@Context('user') userId: any, @Args('productId') productId: number, @Args("req") req: ProductInput) {
-        console.log(userId, productId)
         return this.productService.updateProductById(productId, +userId.userId, req)
     }
 
