@@ -1,6 +1,6 @@
 import { gql, useMutation, useQuery } from '@apollo/client'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Cookies from 'universal-cookie'
 import Loading from './Loading'
 import { useDispatch, useSelector } from 'react-redux'
@@ -47,6 +47,7 @@ import { IProductInputData } from '../types'
 
 const cookie = new Cookies
 const Navbar = () => {
+    const navigate = useNavigate()
     const token = cookie.get("token")
     // const queryClient = useQueryClient();
 const { data, loading: loadingQuerey,error: errorQuerey } = useQuery(GET_USER_INFO, {
@@ -95,6 +96,7 @@ const { data, loading: loadingQuerey,error: errorQuerey } = useQuery(GET_USER_IN
     });
     const handleOnLogOut = () => {
         cookie.remove("token")
+        // navigate("/")
         window.location.href = "/"
 
     }

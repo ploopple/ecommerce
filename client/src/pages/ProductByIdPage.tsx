@@ -1,6 +1,6 @@
 import { gql, useMutation, useQuery } from '@apollo/client'
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Loading from '../components/Loading'
 import Navbar from '../components/Navbar'
 import { useDispatch } from 'react-redux'
@@ -30,6 +30,7 @@ import Cookies from 'universal-cookie'
 
 const cookie = new Cookies()
 const ProductByIdPage = () => {
+  const navigate = useNavigate()
   const token = cookie.get("token")
   const [updateProductMutation, { data: mutationData, loading: mutationLoading, error: mutationError }] = useMutation(UPDATE_PRODUCT_BY_PRODUCTID, {
     context: {
@@ -157,9 +158,14 @@ const [deleteProductMutation, { data: deleteMutationData, loading: deleteMutatio
       variables: {
         id: Number(productId)
       },
-      refetchQueries: [{query: GET_ALL_PRODUCTS}]
+      refetchQueries: [{query: GET_ALL_PRODUCTS}],
+      onCompleted(){
+        navigate("/")
+
+      },
+
     })
-    window.location.href ="/"
+    // window.location.href ="/"
   }
   return (
     <>
