@@ -48,15 +48,26 @@ export class ProductService {
 
 
     //update
-    async updateProductById(productId: number, userId: number) {
+    async updateProductById(productId: number, userId: number, req: ProductInput) {
+            console.log(req)
         try{
             const product = await this.prisma.product.findFirstOrThrow({where: {id: productId}})
-            console.log(product.userId !== userId)
             if(product.userId !== userId) {
                 throw new ForbiddenException("product does not belong to you")
             }
+            return await this.prisma.product.update({
+                where: {id: productId},
+                data: {
+                    name: req.name,
+                    description: req.description,
+                    createdBy: req.createdBy,
+                    price: req.price,
+                    stocks: req.stocks,
+                    image: req.image
+                }
+            })
 
-            return product
+            // return product
         }catch(err) {
             throw err
         }

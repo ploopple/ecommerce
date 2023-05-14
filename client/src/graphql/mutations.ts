@@ -24,11 +24,18 @@ export const SIGNUP_MUTATION = gql`
 `;
 
 export const UPDATE_PRODUCT_BY_PRODUCTID = gql`
-mutation UpdateProductById($id: Float!){
-  UpdateProductById(productId: $id) {
+mutation UpdateProductById($id: Float!, $req: ProductInput!) {
+  UpdateProductById(productId: $id, req: $req) {
     id
     name
     userId
+    image
+    createdBy
+    createdAt
+    description
+    price
+    stocks
+    updatedAt
   }
 }
 `

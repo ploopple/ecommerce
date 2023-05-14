@@ -44,7 +44,7 @@ input UserInputLogin {
 type Mutation {
   SignUp(req: UserInputSignUp!): String!
   CreateNewProduct(req: ProductInput!): ProductEntity!
-  UpdateProductById(productId: Float!): ProductEntity!
+  UpdateProductById(productId: Float!, req: ProductInput!): ProductEntity!
   DeleteProductById(productId: Float!): String!
 }
 

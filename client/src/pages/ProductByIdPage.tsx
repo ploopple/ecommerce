@@ -8,6 +8,7 @@ import { updateCart } from '../features/dataSlice'
 import { GET_PRODUCT_BY_ID } from '../graphql/queries'
 import { IProductData, IProductInputData } from '../types'
 import { UPDATE_PRODUCT_BY_PRODUCTID } from '../graphql/mutations'
+import Cookies from 'universal-cookie'
 
 // const GET_PRODUCT_BY_ID = gql`
 // query GetProductById($id: Float!){
@@ -27,9 +28,16 @@ import { UPDATE_PRODUCT_BY_PRODUCTID } from '../graphql/mutations'
 // }
 // `
 
+const cookie = new Cookies()
 const ProductByIdPage = () => {
-  const [updateProductMutation, { datas, updateProductMutationLoading,updateProductMutationError}] = useMutation(UPDATE_PRODUCT_BY_PRODUCTID)
-  console.log(datas)
+  const token = cookie.get("token")
+  const [updateProductMutation, { data: mutationData, loading: mutationLoading,error:mutationError}] = useMutation(UPDATE_PRODUCT_BY_PRODUCTID, {
+context: {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  })
   const [updateProductInputData, setUpdateProductInputData] = useState<IProductInputData>({
     name: {value: "", errMsg: ""},
     description: {value: "", errMsg: ""},
@@ -43,7 +51,9 @@ const ProductByIdPage = () => {
   const [quantity, setQuantity] = useState(1)
   const [product, setProduct] = useState<any>({})
   const { productId } = useParams()
-  const { data, loading, error } = useQuery<{GetProductById: IProductData}>(GET_PRODUCT_BY_ID, {
+  console.log(token)
+  const { data, loading, error } = useQuery<{ GetProductById: IProductData }>(GET_PRODUCT_BY_ID, {
+    
     variables: {
       id: productId && +productId
     }
@@ -62,7 +72,7 @@ const ProductByIdPage = () => {
       console.log(updateProductInputData)
     }
   }, [data])
-  if (loading) {
+  if (loading || mutationLoading) {
     return <Loading />
   }
 
@@ -110,6 +120,29 @@ const isDissableUpdateProductBtn: boolean =
         updateProductInputData.createdBy.value.toString().length < 3 ||
         updateProductInputData.image.value.toString().length < 3
     const handleOnUpdateProduct = () => {
+      updateProductMutation({
+        variables: {
+          id: Number(productId),
+          req: {
+            name: updateProductInputData.name.value,
+            description: updateProductInputData.description.value,
+            createdBy: updateProductInputData.createdBy.value,
+            image: updateProductInputData.image.value,
+            price: Number(updateProductInputData.price.value),
+            stocks: Number(updateProductInputData.stocks.value)
+          }
+        },
+update: (cache, data) => {
+                    console.log(cache, data)
+                    // const prod: any = cache.readQuery({ query: GET_PRODUCT_BY_ID })
+                    cache.writeQuery({
+                        query: GET_PRODUCT_BY_ID,
+                        data: { GetProductById: [data.data.UpdateProductById] }
+                    })
+                }
+        // refetchQueries: [{query: GET_PRODUCT_BY_ID}]
+      })
+      setIsUpdatingProduct(false)
 
     }
   return (

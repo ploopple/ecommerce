@@ -14,7 +14,6 @@ export class ProductResolver {
     @UseGuards(new AuthGuard())
     @Mutation(() => ProductEntity)
     CreateNewProduct(@Context('user') userId: any, @Args('req') req: ProductInput) {
-        console.log(userId)
         return this.productService.createNewProduct(+userId.userId, req)
     }
 
@@ -30,8 +29,9 @@ export class ProductResolver {
 
     @UseGuards(new AuthGuard())
     @Mutation(() => ProductEntity)
-    UpdateProductById(@Context('user') userId: number, @Args('productId') productId: number) {
-        return this.productService.updateProductById(productId, +userId)
+    UpdateProductById(@Context('user') userId: any, @Args('productId') productId: number, @Args("req") req: ProductInput) {
+        console.log(userId, productId)
+        return this.productService.updateProductById(productId, +userId.userId, req)
     }
 
     @UseGuards(new AuthGuard())
