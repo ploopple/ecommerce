@@ -46,7 +46,7 @@ export class UserService {
             }
             return this.createJWTToken(user.id + "")
         } catch (err) {
-            return err
+            throw err
         }
     }
     async getUserInfo(userId: number) {

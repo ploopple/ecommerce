@@ -2,6 +2,7 @@ import { Injectable, ForbiddenException } from '@nestjs/common';
 import { PrismaClient, User } from '@prisma/client';
 import { ProductInput } from './dto/product.input';
 import { PrismaService } from '../prisma/prisma.service';
+import { ProductEntity } from './dto/product.entity';
 
 @Injectable()
 export class ProductService {
@@ -19,17 +20,23 @@ export class ProductService {
                     description: req.description,
                     userId,
                     price: req.price,
-                    stocks: req.stocks
+                    stocks: req.stocks,
+                    // createdAt: req.createdAt,
+                    // updatedAt: req.updatedAt
                 }
             })
         } catch (err) {
-            return err
+            throw err
         }
 }
 
     async getProductById(productId: number) {
         try{
-            return await this.prisma.product.findFirstOrThrow({where: {id: productId}})
+            const product =  await this.prisma.product.findFirst({where: {id: productId}})
+            if(!product) {
+                return new ForbiddenException
+            }
+            return product
         }catch(err) {
             throw err
         }
@@ -43,12 +50,11 @@ export class ProductService {
         }
     }
 
-
     async updateProductById(productId: number, userId: number, req: ProductInput) {
         try{
             const product = await this.prisma.product.findFirstOrThrow({where: {id: productId}})
             if(product.userId !== userId) {
-                throw new ForbiddenException("product does not belong to you")
+                return new ForbiddenException("product does not belong to you")
             }
             return await this.prisma.product.update({
                 where: {id: productId},
@@ -63,15 +69,19 @@ export class ProductService {
             })
 
         }catch(err) {
-            throw err
+            return err
         }
     }
 
     async deleteProductById(productId: number, userId: number) {
         try{
-            const product = await this.prisma.product.findFirstOrThrow({where: {id: productId}})
+            const product = await this.prisma.product.findFirst({where: {id: productId}})
+            if(!product) {
+
+                return new ForbiddenException("product does not exist")
+            }
             if(product.userId !== userId) {
-                throw new ForbiddenException("product does not belong to you")
+                return new ForbiddenException("product does not belong to you")
             }
 
             await this.prisma.product.delete({where: {id: product.id}})

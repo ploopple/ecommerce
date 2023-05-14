@@ -20,4 +20,11 @@ export class ProductInput {
     
     @Field()
     image: string
+
+    // @Field()
+    // createdAt?: Date
+
+    // @Field()
+    // updatedAt?: Date
+
 }
