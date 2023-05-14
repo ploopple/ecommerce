@@ -42,38 +42,45 @@ const HomePage = () => {
 
   return (
     <>
-    <Navbar/>
-    <main className="bg-gray-100 h-[94vh]">
-    <div className="container mx-auto px-4 py-8">
-      <div
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
-      >
-        {allProducts.map(product => (
+      {/* <Navbar /> */}
+      {/* <main className="bg-gray-100 h-[94vh]"> */}
+        {!allProducts.length ? (
+          <div className='text-center'>
 
-        <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-          <Link to={"/product/"+product.id} className="block">
-            <img
-              src={product.image}
-              alt="Product Image"
-              className="w-full"
-            />
-          </Link>
-            <div className="p-4">
-            <Link
-              to={"/product/"+product.id}
-              className="text-xl font-bold text-gray-800 hover:text-red-500 mb-2 block"
-              >{product.name}</Link>
-            <p className="text-gray-800 font-bold">${product.price}</p>
-            <button
-              className="mt-4 w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none"
- onClick={() => dispatch(updateCart({ product, quantity: 1 }))} 
-            >
-              Add to Cart
-            </button>
+            <h1 className='p-8 text-xl'>There are now products. go and create a new one</h1>
           </div>
-        </div>
-        ))}
-        {/* <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        ) : (
+
+          <div className="container mx-auto px-4 py-8">
+            <div
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+            >
+              {allProducts.map(product => (
+
+                <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+                  <Link to={"/product/" + product.id} className="block">
+                    <img
+                      src={product.image}
+                      alt="Product Image"
+                      className="w-full"
+                    />
+                  </Link>
+                  <div className="p-4">
+                    <Link
+                      to={"/product/" + product.id}
+                      className="text-xl font-bold text-gray-800 hover:text-red-500 mb-2 block"
+                    >{product.name}</Link>
+                    <p className="text-gray-800 font-bold">${product.price}</p>
+                    <button
+                      className="mt-4 w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none"
+                      onClick={() => dispatch(updateCart({ product, quantity: 1 }))}
+                    >
+                      Add to Cart
+                    </button>
+                  </div>
+                </div>
+              ))}
+              {/* <div className="bg-white rounded-lg shadow-md overflow-hidden">
           <a href="/product" className="block">
             <img
               src="https://via.placeholder.com/500x500"
@@ -151,9 +158,10 @@ const HomePage = () => {
             </button>
           </div>
       </div> */}
-        </div>
-    </div>
-  </main>
+            </div>
+          </div>
+        )}
+      {/* </main> */}
     </>
   )
 }

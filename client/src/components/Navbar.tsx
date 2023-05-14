@@ -1,4 +1,4 @@
-import { gql, useMutation } from '@apollo/client'
+import { gql, useMutation, useQuery } from '@apollo/client'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Cookies from 'universal-cookie'
@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../app/store'
 // import { IInputData } from '../types'
 import { ADD_NEW_PRODUCT } from '../graphql/mutations'
-import { GET_ALL_PRODUCTS } from '../graphql/queries'
+import { GET_ALL_PRODUCTS, GET_USER_INFO } from '../graphql/queries'
 import { IProductInputData } from '../types'
 
 // const GET_ALL_PRODUCTS = gql`
@@ -47,8 +47,16 @@ import { IProductInputData } from '../types'
 
 const cookie = new Cookies
 const Navbar = () => {
+    const token = cookie.get("token")
     // const queryClient = useQueryClient();
-
+const { data, loading: loadingQuerey,error: errorQuerey } = useQuery(GET_USER_INFO, {
+        context: {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        },
+        fetchPolicy: "no-cache"
+    });
     const [newProductInputData, setNewProductInputData] = useState<IProductInputData>({
         name: { value: "", errMsg: "" },
         description: { value: "", errMsg: "" },
@@ -60,7 +68,6 @@ const Navbar = () => {
     const [isAddingNewProduct, setIsAddingNewProduct] = useState(false)
     const productCart = useSelector((state: RootState) => state.data.cart)
     const dispatch = useDispatch()
-    const token = cookie.get("token")
     const [addNewProductMutation, { loading, error }] = useMutation(ADD_NEW_PRODUCT, {
         context: {
             headers: {
@@ -210,7 +217,7 @@ const Navbar = () => {
                         <label htmlFor="">created By</label>
                         <input type="text" className='bg-gray-200 rounded-lg h-8 p-2 my-2' onChange={e => handleOnInputChange(e.target.value, "createdBy")} value={newProductInputData.createdBy.value} />
                         <p className="text-red-400 text-sm">{newProductInputData.createdBy.errMsg}</p>
-                        <label htmlFor="">image</label>
+                        <label htmlFor="">image (500x500)</label>
                         <input type="text" className='bg-gray-200 rounded-lg h-8 p-2 my-2' onChange={e => handleOnInputChange(e.target.value, "image")} value={newProductInputData.image.value} />
                         <p className="text-red-400 text-sm">{newProductInputData.image.errMsg}</p>
                         <button disabled={isDissableAddNewProductBtn} onClick={handleOnAddNewProduct} className={`${isDissableAddNewProductBtn ? "bg-red-300" : "bg-red-600"}  text-white py-2 rounded-xl mt-2`}>Add new Product</button>
@@ -224,8 +231,8 @@ const Navbar = () => {
             </h1>
             <ul className='flex'>
 
-                {/* {!loading && data && data.GetUserInfo ? ( */}
-                {token ? (
+                {!loading && data && data.GetUserInfo ? (
+                // {token ? (
                     <>
                         <li className='mx-5 cursor-pointer' onClick={() => setIsAddingNewProduct(true)}>add product</li>
                         <li className='mx-5'>

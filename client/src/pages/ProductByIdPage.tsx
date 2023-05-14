@@ -163,7 +163,7 @@ const [deleteProductMutation, { data: deleteMutationData, loading: deleteMutatio
   }
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       {isUpdatingProduct ? (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50  overflow-auto">
           <div className="w-2/5 max-h-[98%] overflow-auto bg-white rounded-xl flex flex-col p-4">
@@ -172,21 +172,27 @@ const [deleteProductMutation, { data: deleteMutationData, loading: deleteMutatio
             </div>
             <label htmlFor="">Name</label>
             <input type="text" className='bg-gray-200 rounded-lg h-8 p-2 my-2' onChange={e => handleOnInputChange(e.target.value, "name")} value={updateProductInputData.name.value} />
+            <p className="text-red-400 text-sm">{updateProductInputData.name.errMsg}</p>
             <label htmlFor="">Description</label>
             <input type="text" className='bg-gray-200 rounded-lg h-8 p-2 my-2' onChange={e => handleOnInputChange(e.target.value, "description")} value={updateProductInputData.description.value} />
+            <p className="text-red-400 text-sm">{updateProductInputData.description.errMsg}</p>
             <label htmlFor="">Created By</label>
             <input type="text" className='bg-gray-200 rounded-lg h-8 p-2 my-2' onChange={e => handleOnInputChange(e.target.value, "createdBy")} value={updateProductInputData.createdBy.value} />
+            <p className="text-red-400 text-sm">{updateProductInputData.createdBy.errMsg}</p>
             <label htmlFor="">Stocks</label>
             <input type="number" className='bg-gray-200 rounded-lg h-8 p-2 my-2' onChange={e => handleOnInputChange(e.target.value, "stocks")} value={updateProductInputData.stocks.value} />
+            <p className="text-red-400 text-sm">{updateProductInputData.stocks.errMsg}</p>
             <label htmlFor="">Price</label>
             <input type="number" className='bg-gray-200 rounded-lg h-8 p-2 my-2' onChange={e => handleOnInputChange(e.target.value, "price")} value={updateProductInputData.price.value} />
+            <p className="text-red-400 text-sm">{updateProductInputData.price.errMsg}</p>
             <label htmlFor="">Image</label>
             <input type="text" className='bg-gray-200 rounded-lg h-8 p-2 my-2' onChange={e => handleOnInputChange(e.target.value, "image")} value={updateProductInputData.image.value} />
+            <p className="text-red-400 text-sm">{updateProductInputData.image.errMsg}</p>
             <button disabled={isDissableUpdateProductBtn} onClick={handleOnUpdateProduct} className={`${isDissableUpdateProductBtn ? "bg-red-300" : "bg-red-600"}  text-white py-2 rounded-xl mt-2`}>Add new Product</button>
           </div>
         </div>
       ) : null}
-      <main className="bg-gray-100 h-[94vh]">
+      {/* <main className="bg-gray-100 h-[94vh]"> */}
         <div className="container mx-auto px-4 py-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="w-full">
@@ -216,6 +222,7 @@ const [deleteProductMutation, { data: deleteMutationData, loading: deleteMutatio
                   >
                     +
                   </button>
+                  <p className='ml-2'>max {product.stocks}</p>
                 </div>
               </div>
               <button
@@ -236,7 +243,7 @@ const [deleteProductMutation, { data: deleteMutationData, loading: deleteMutatio
             </div>
           </div>
         </div>
-      </main>
+      {/* </main> */}
     </>
   )
 }

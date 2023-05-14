@@ -40,3 +40,14 @@ query GetProductById($id: Float!){
   }
 }
 `
+export const GET_USER_INFO = gql`
+ {
+   GetUserInfo {
+    id
+    username
+    email
+    createdAt
+    createdAt
+    updatedAt
+  }
+}`

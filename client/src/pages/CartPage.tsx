@@ -71,7 +71,7 @@ const CartPage = () => {
 
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       {/* <main> */}
 
       {/* <main className='w-full h-[94vh] flex flex-wrap justify-center p-4'> */}

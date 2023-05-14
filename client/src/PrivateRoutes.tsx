@@ -5,22 +5,13 @@ import Loading from "./components/Loading"
 import { Navigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { setUser } from "./features/dataSlice"
+import { GET_USER_INFO } from "./graphql/queries"
 
 interface IPrivateRoutes {
     isPrivate: boolean
     children: JSX.Element
 }
-const GET_USER_INFO = gql`
- {
-   GetUserInfo {
-    id
-    username
-    email
-    createdAt
-    createdAt
-    updatedAt
-  }
-}`
+
 
 
 const cookie = new Cookies
