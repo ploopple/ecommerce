@@ -8,7 +8,7 @@ import { RootState } from '../app/store'
 // import { IInputData } from '../types'
 import { ADD_NEW_PRODUCT } from '../graphql/mutations'
 import { GET_ALL_PRODUCTS } from '../graphql/queries'
-import { INewProductInputData } from '../types'
+import { IProductInputData } from '../types'
 
 // const GET_ALL_PRODUCTS = gql`
 // {
@@ -49,7 +49,7 @@ const cookie = new Cookies
 const Navbar = () => {
     // const queryClient = useQueryClient();
 
-    const [newProductInputData, setNewProductInputData] = useState<INewProductInputData>({
+    const [newProductInputData, setNewProductInputData] = useState<IProductInputData>({
         name: { value: "", errMsg: "" },
         description: { value: "", errMsg: "" },
         price: { value: 0, errMsg: "" },

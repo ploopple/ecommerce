@@ -22,3 +22,13 @@ export const SIGNUP_MUTATION = gql`
     SignUp(req: $req)
   }
 `;
+
+export const UPDATE_PRODUCT_BY_PRODUCTID = gql`
+mutation UpdateProductById($id: Float!){
+  UpdateProductById(productId: $id) {
+    id
+    name
+    userId
+  }
+}
+`

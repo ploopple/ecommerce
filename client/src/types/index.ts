@@ -26,7 +26,7 @@ export interface IInputDataString {
 export interface IInputDataNumber {
   value: number , errMsg: string 
 }
-export interface INewProductInputData {
+export interface IProductInputData {
   name: IInputDataString
   description: IInputDataString
   price: IInputDataNumber

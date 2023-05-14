@@ -1,4 +1,4 @@
-import { gql, useQuery } from '@apollo/client'
+import { gql, useMutation, useQuery } from '@apollo/client'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Loading from '../components/Loading'
@@ -6,6 +6,8 @@ import Navbar from '../components/Navbar'
 import { useDispatch } from 'react-redux'
 import { updateCart } from '../features/dataSlice'
 import { GET_PRODUCT_BY_ID } from '../graphql/queries'
+import { IProductData, IProductInputData } from '../types'
+import { UPDATE_PRODUCT_BY_PRODUCTID } from '../graphql/mutations'
 
 // const GET_PRODUCT_BY_ID = gql`
 // query GetProductById($id: Float!){
@@ -26,18 +28,38 @@ import { GET_PRODUCT_BY_ID } from '../graphql/queries'
 // `
 
 const ProductByIdPage = () => {
+  const [updateProductMutation, { datas, updateProductMutationLoading,updateProductMutationError}] = useMutation(UPDATE_PRODUCT_BY_PRODUCTID)
+  console.log(datas)
+  const [updateProductInputData, setUpdateProductInputData] = useState<IProductInputData>({
+    name: {value: "", errMsg: ""},
+    description: {value: "", errMsg: ""},
+    createdBy: {value: "", errMsg: ""},
+    image: {value: "", errMsg: ""},
+    price: {value: 0, errMsg: ""},
+    stocks: {value: 0, errMsg: ""},
+  })
   const dispatch = useDispatch()
+  const [isUpdatingProduct, setIsUpdatingProduct] = useState(true)
   const [quantity, setQuantity] = useState(1)
   const [product, setProduct] = useState<any>({})
   const { productId } = useParams()
-  const { data, loading, error } = useQuery(GET_PRODUCT_BY_ID, {
+  const { data, loading, error } = useQuery<{GetProductById: IProductData}>(GET_PRODUCT_BY_ID, {
     variables: {
       id: productId && +productId
     }
   });
   useEffect(() => {
-    if (!loading) {
+    if (data) {
       setProduct(data.GetProductById)
+      setUpdateProductInputData({
+        name: {value: data.GetProductById.name, errMsg: ""},
+        description: {value: data.GetProductById.description, errMsg: ""},
+        createdBy: {value: data.GetProductById.createdBy, errMsg: ""},
+        price: {value: data.GetProductById.price, errMsg: ""},
+        stocks: {value: data.GetProductById.stocks, errMsg: ""},
+        image: {value: data.GetProductById.image, errMsg: ""},
+      })
+      console.log(updateProductInputData)
     }
   }, [data])
   if (loading) {
@@ -54,38 +76,67 @@ const ProductByIdPage = () => {
       setQuantity(quantity - 1)
     }
   }
-  // return (
-  //   <>
-  //     <Navbar />
-  //     <main className='flex p-8'>
-  //       <img width={500} height={500} className='border  rounded-xl bg-red-300' src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.qcReVnSVjwqWYRhMuEiuqwHaHa%26pid%3DApi&f=1&ipt=648a966b913977453c901fac4464dbd74745755bd70cbc3ef83b3b586e1c3110&ipo=images" alt="" />
-  //       <div className='ml-8 mt-8'>
-  //         <h1 className='font-bold'>{product.name}</h1>
-  //         <h1 className='my-4'>By {product.createdBy}</h1>
-  //         <h2 className='my-4 font-extrabold'>${product.price} or ${product.price / 12}/month</h2>
-  //         <p className='my-4'>Description: </p>
-  //         <p >{product.description}</p>
-  //         <div className=' w-full mt-8 flex'>
-  //           <button className='bg-gray-200 rounded-s-2xl w-14 h-10' onClick={handleOnSubtractQuantity}>-</button>
-  //           <p className='bg-gray-200 pt-2'>{quantity}</p>
-  //           <button className='bg-gray-200 rounded-e-2xl w-14 h-10' onClick={handleOnAddQuantity}>+</button>
-  //           <p className='ml-12 mt-3 text-sm'>only {product.stocks} items left! Don't miss it</p>
-  //         </div>
-  //         <div className='mt-8 flex'>
-  //           <button className=' w-[49%] bg-green-700 text-white py-2 rounded-xl hover:bg-green-900'>Buy now</button>
-  //           <button 
-  //             onClick={() => dispatch(updateCart({product, quantity}))}
-  //             className='ml-2 w-[49%] text-green-700 bg-gray-200 py-2 rounded-xl hover:bg-gray-300'>Add to cart</button>
-  //         </div>
-  //       </div>
-  //     </main>
-  //   </>
-  // )
+ const handleOnInputChange = (input: string, target: string) => {
 
+        let errMsg = ""
+        if (target === "stocks" || target === "price") {
 
+        } else {
+
+            errMsg = input.length >= 3 ? "" : target + " must be 3 characters or longer"
+        }
+        setUpdateProductInputData({
+            ...updateProductInputData,
+            [target]: {
+                value: input,
+                errMsg
+            }
+        })
+    }
+    const handleOnCloseUpdateProduct = () => {
+      setUpdateProductInputData({
+        name: {value: product.name, errMsg: ""},
+        description: {value: product.description, errMsg: ""},
+        createdBy: {value: product.createdBy, errMsg: ""},
+        price: {value: product.price, errMsg: ""},
+        stocks: {value: product.stocks, errMsg: ""},
+        image: {value: product.image, errMsg: ""},
+      })
+      setIsUpdatingProduct(false)
+    }
+const isDissableUpdateProductBtn: boolean =
+        updateProductInputData.name.value.toString().length < 3 ||
+        updateProductInputData.description.value.toString().length < 3 ||
+        updateProductInputData.createdBy.value.toString().length < 3 ||
+        updateProductInputData.image.value.toString().length < 3
+    const handleOnUpdateProduct = () => {
+
+    }
   return (
     <>
       <Navbar />
+      {isUpdatingProduct ? (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50  overflow-auto">
+          <div className="w-2/5 max-h-[98%] overflow-auto bg-white rounded-xl flex flex-col p-4">
+            <div>
+              <button onClick={handleOnCloseUpdateProduct} className='float-right text-red-500'>X</button>
+            </div>
+            <label htmlFor="">Name</label>
+            <input type="text" className='bg-gray-200 rounded-lg h-8 p-2 my-2' onChange={e => handleOnInputChange(e.target.value, "name")} value={updateProductInputData.name.value} />
+            <label htmlFor="">Description</label>
+            <input type="text" className='bg-gray-200 rounded-lg h-8 p-2 my-2' onChange={e => handleOnInputChange(e.target.value, "description")} value={updateProductInputData.description.value} />
+            <label htmlFor="">Created By</label>
+            <input type="text" className='bg-gray-200 rounded-lg h-8 p-2 my-2' onChange={e => handleOnInputChange(e.target.value, "createdBy")} value={updateProductInputData.createdBy.value} />
+            <label htmlFor="">Stocks</label>
+            <input type="number" className='bg-gray-200 rounded-lg h-8 p-2 my-2' onChange={e => handleOnInputChange(e.target.value, "stocks")} value={updateProductInputData.stocks.value} />
+            <label htmlFor="">Price</label>
+            <input type="number" className='bg-gray-200 rounded-lg h-8 p-2 my-2' onChange={e => handleOnInputChange(e.target.value, "price")} value={updateProductInputData.price.value} />
+            <label htmlFor="">Image</label>
+            <input type="text" className='bg-gray-200 rounded-lg h-8 p-2 my-2' onChange={e => handleOnInputChange(e.target.value, "image")} value={updateProductInputData.image.value} />
+            <button disabled={isDissableUpdateProductBtn} onClick={handleOnUpdateProduct} className={`${isDissableUpdateProductBtn ? "bg-red-300" : "bg-red-600"}  text-white py-2 rounded-xl mt-2`}>Add new Product</button>
+          </div>
+        </div>
+      ) : null}
       <main className="bg-gray-100">
         <div className="container mx-auto px-4 py-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -95,23 +146,12 @@ const ProductByIdPage = () => {
                 alt="Product Image"
                 className="w-full rounded-lg"
               />
+              <button onClick={() => setIsUpdatingProduct(true)}>Update</button>
             </div>
             <div className="w-full">
               <h1 className="text-4xl font-bold text-gray-800 mb-4">{product.name}</h1>
               <p className="text-gray-600 mb-4">{product.description}</p>
               <p className="text-gray-800 font-bold mb-4">${product.price}</p>
-              {/* <div className="mb-4">
-                <label className="text-gray-600">Size</label>
-                <select
-                  name="size"
-                  id="size"
-                  className="block w-full mt-1 py-2 px-3 border border-gray-400 bg-white rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-gray-200 focus:border-gray-500"
-                >
-                  <option value="s">Small</option>
-                  <option value="m">Medium</option>
-                  <option value="l">Large</option>
-                </select>
-              </div> */}
               <div className="mb-4">
                 <label className="text-gray-600">Quantity</label>
                 <div className="flex items-center mt-1">
@@ -122,13 +162,6 @@ onClick={handleOnSubtractQuantity}
                     -
                   </button>
                   <p>{quantity}</p>
-                  {/* <input
-                    type="number"
-                    name="quantity"
-                    id="quantity"
-                    className="w-12 border border-gray-400 rounded-lg py-1 px-2 text-center mx-2"
-                    value="1"
-                  /> */}
                   <button
                     className="w-6 h-6 bg-gray-200 text-gray-600 rounded-full focus:outline-none"
                     onClick={handleOnAddQuantity}
