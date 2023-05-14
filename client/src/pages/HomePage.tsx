@@ -1,5 +1,4 @@
-import { gql, useQuery } from '@apollo/client'
-import Navbar from '../components/Navbar'
+import { useQuery } from '@apollo/client'
 import { useEffect } from 'react';
 import Loading from '../components/Loading';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,23 +7,6 @@ import { Link } from 'react-router-dom';
 import { setAllProducts, updateCart } from '../features/dataSlice';
 import { GET_ALL_PRODUCTS } from '../graphql/queries';
 
-// const GET_ALL_PRODUCTS = gql`
-// {
-//   GetAllProducts {
-//     id
-//     name
-//     description
-//     price
-//     stocks
-//     userId
-//     image
-//     createdBy
-//     updatedAt
-//     createdAt
-//   }
-// }
-// `
-
 const HomePage = () => {
   const allProducts = useSelector((state: RootState) => state.data.allProductsData)
   const dispatch = useDispatch()
@@ -32,7 +14,6 @@ const HomePage = () => {
   useEffect(() => {
     if (data && data.GetAllProducts) {
       dispatch(setAllProducts(data?.GetAllProducts))
-      // dispatch((data?.GetAllProducts))
     }
   }, [data])
   if (loading) {
@@ -42,15 +23,11 @@ const HomePage = () => {
 
   return (
     <>
-      {/* <Navbar /> */}
-      {/* <main className="bg-gray-100 h-[94vh]"> */}
         {!allProducts.length ? (
           <div className='text-center'>
-
             <h1 className='p-8 text-xl'>There are now products. go and create a new one</h1>
           </div>
         ) : (
-
           <div className="container mx-auto px-4 py-8">
             <div
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
@@ -80,88 +57,9 @@ const HomePage = () => {
                   </div>
                 </div>
               ))}
-              {/* <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          <a href="/product" className="block">
-            <img
-              src="https://via.placeholder.com/500x500"
-              alt="Product Image"
-              className="w-full"
-            />
-          </a>
-          <div className="p-4">
-            <a
-              href="/product"
-              className="text-xl font-bold text-gray-800 hover:text-red-500 mb-2 block"
-              >Product Name</a
-            >
-            <p className="text-gray-600 mb-2">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-              malesuada sollicitudin eros, vitae bibendum velit molestie eget.
-            </p>
-            <p className="text-gray-800 font-bold">$29.99</p>
-            <button
-              className="mt-4 w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none"
-            >
-              Add to Cart
-            </button>
-          </div>
-        </div>
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          <a href="/product" className="block">
-            <img
-              src="https://via.placeholder.com/500x500"
-              alt="Product Image"
-              className="w-full"
-            />
-          </a>
-          <div className="p-4">
-            <a
-              href="/product"
-              className="text-xl font-bold text-gray-800 hover:text-red-500 mb-2 block"
-              >Product Name</a
-            >
-            <p className="text-gray-600 mb-2">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-              malesuada sollicitudin eros, vitae bibendum velit molestie eget.
-            </p>
-            <p className="text-gray-800 font-bold">$29.99</p>
-            <button
-              className="mt-4 w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none"
-            >
-              Add to Cart
-            </button>
-          </div>
-        </div>
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          <a href="/product" className="block">
-            <img
-              src="https://via.placeholder.com/500x500"
-              alt="Product Image"
-              className="w-full"
-            />
-          </a>
-          <div className="p-4">
-            <a
-              href="/product"
-              className="text-xl font-bold text-gray-800 hover:text-red-500 mb-2 block"
-              >Product Name</a
-            >
-            <p className="text-gray-600 mb-2">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-              malesuada sollicitudin eros, vitae bibendum velit molestie eget.
-            </p>
-            <p className="text-gray-800 font-bold">$29.99</p>
-            <button
-              className="mt-4 w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none"
-            >
-              Add to Cart
-            </button>
-          </div>
-      </div> */}
             </div>
           </div>
         )}
-      {/* </main> */}
     </>
   )
 }

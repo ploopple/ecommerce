@@ -4,20 +4,8 @@ import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import Loading from "../components/Loading";
 import Cookies from 'universal-cookie';
 import { Navigate } from 'react-router-dom';
-import Navbar from "../components/Navbar";
 import { LOGIN_QUERY } from "../graphql/queries";
 import { ILoginData } from "../types";
-
-// interface ISignUpData {
-//   [key: string]: { value: string, errMsg: string }
-// }
-
-
-// const LOGIN_QUERY= gql`
-//   query Login($req: UserInputLogin!) {
-//     Login(req: $req)
-//   }
-// `;
 
 const LoginPage = () => {
 
@@ -77,9 +65,6 @@ const LoginPage = () => {
   }
   return (
 <>
-
-      {/* <Navbar /> */}
-      {/* <main className='w-full h-[94vh]'> */}
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       {loading && <Loading/>}
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -111,7 +96,6 @@ const LoginPage = () => {
         </div>
       </div>
     </div>
-    {/* </main> */}
     </>
   )
 }

@@ -1,35 +1,19 @@
-import { gql, useMutation, useQuery } from '@apollo/client'
-import React, { useEffect, useState } from 'react'
+import { useMutation, useQuery } from '@apollo/client'
+import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import Loading from '../components/Loading'
-import Navbar from '../components/Navbar'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { updateCart } from '../features/dataSlice'
 import { GET_ALL_PRODUCTS, GET_PRODUCT_BY_ID } from '../graphql/queries'
 import { IProductData, IProductInputData } from '../types'
 import { DELETE_PRODUCT_BY_ID, UPDATE_PRODUCT_BY_PRODUCTID } from '../graphql/mutations'
 import Cookies from 'universal-cookie'
+import { RootState } from '../app/store'
 
-// const GET_PRODUCT_BY_ID = gql`
-// query GetProductById($id: Float!){
-//   GetProductById(productId: $id){
-//     id
-//     name
-//     description
-//     createdBy
-//     price
-//     stocks
-//     userId
-//     stocks
-//     image
-//     createdAt
-//     updatedAt
-//   }
-// }
-// `
 
 const cookie = new Cookies()
 const ProductByIdPage = () => {
+  const userData = useSelector((state: RootState) => state.data.userData)
   const navigate = useNavigate()
   const token = cookie.get("token")
   const [updateProductMutation, { data: mutationData, loading: mutationLoading, error: mutationError }] = useMutation(UPDATE_PRODUCT_BY_PRODUCTID, {
@@ -78,7 +62,6 @@ const [deleteProductMutation, { data: deleteMutationData, loading: deleteMutatio
         stocks: { value: data.GetProductById.stocks, errMsg: "" },
         image: { value: data.GetProductById.image, errMsg: "" },
       })
-      console.log(updateProductInputData)
     }
   }, [data])
   if (loading || mutationLoading || deleteMutationLoading) {
@@ -142,14 +125,11 @@ const [deleteProductMutation, { data: deleteMutationData, loading: deleteMutatio
         }
       },
       update: (cache, data) => {
-        console.log(cache, data)
-        // const prod: any = cache.readQuery({ query: GET_PRODUCT_BY_ID })
         cache.writeQuery({
           query: GET_PRODUCT_BY_ID,
           data: { GetProductById: [data.data.UpdateProductById] }
         })
       }
-      // refetchQueries: [{query: GET_PRODUCT_BY_ID}]
     })
     setIsUpdatingProduct(false)
   }
@@ -161,15 +141,12 @@ const [deleteProductMutation, { data: deleteMutationData, loading: deleteMutatio
       refetchQueries: [{query: GET_ALL_PRODUCTS}],
       onCompleted(){
         navigate("/")
-
       },
-
     })
-    // window.location.href ="/"
   }
+  console.log(productId, userData?.id)
   return (
     <>
-      {/* <Navbar /> */}
       {isUpdatingProduct ? (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50  overflow-auto">
           <div className="w-2/5 max-h-[98%] overflow-auto bg-white rounded-xl flex flex-col p-4">
@@ -198,7 +175,6 @@ const [deleteProductMutation, { data: deleteMutationData, loading: deleteMutatio
           </div>
         </div>
       ) : null}
-      {/* <main className="bg-gray-100 h-[94vh]"> */}
         <div className="container mx-auto px-4 py-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="w-full">
@@ -249,7 +225,6 @@ const [deleteProductMutation, { data: deleteMutationData, loading: deleteMutatio
             </div>
           </div>
         </div>
-      {/* </main> */}
     </>
   )
 }

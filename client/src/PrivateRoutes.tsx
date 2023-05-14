@@ -27,6 +27,9 @@ const PrivateRoutes: FC<IPrivateRoutes> = ({ isPrivate, children }) => {
                 Authorization: `Bearer ${token}`,
             },
         },
+        onCompleted: (data) => {
+            dispatch(setUser(data.GetUserInfo))
+        },
         fetchPolicy: "no-cache"
     });
 

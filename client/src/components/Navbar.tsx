@@ -1,63 +1,19 @@
-import { gql, useMutation, useQuery } from '@apollo/client'
+import {  useMutation, useQuery } from '@apollo/client'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Cookies from 'universal-cookie'
 import Loading from './Loading'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { RootState } from '../app/store'
-// import { IInputData } from '../types'
 import { ADD_NEW_PRODUCT } from '../graphql/mutations'
-import { GET_ALL_PRODUCTS, GET_USER_INFO } from '../graphql/queries'
+import { GET_ALL_PRODUCTS } from '../graphql/queries'
 import { IProductInputData } from '../types'
 
-// const GET_ALL_PRODUCTS = gql`
-// {
-//   GetAllProducts {
-//     id
-//     name
-//     description
-//     price
-//     stocks
-//     userId
-//     image
-//     createdBy
-//     updatedAt
-//     createdAt
-//    __typename
-//   }
-// }
-// `
-// const ADD_NEW_PRODUCT = gql`
-// mutation CreateNewProduct($req: ProductInput!) {
-//     CreateNewProduct(req: $req) {
-//         id
-//         name
-//         description
-//         price
-//         stocks
-//         userId
-//         image
-//         createdBy
-//         createdAt
-//         updatedAt
-//    __typename
-//     }
-//   }
-// `
 
 const cookie = new Cookies
 const Navbar = () => {
-    const navigate = useNavigate()
     const token = cookie.get("token")
-    // const queryClient = useQueryClient();
-const { data, loading: loadingQuerey,error: errorQuerey } = useQuery(GET_USER_INFO, {
-        context: {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        },
-        fetchPolicy: "no-cache"
-    });
+
     const [newProductInputData, setNewProductInputData] = useState<IProductInputData>({
         name: { value: "", errMsg: "" },
         description: { value: "", errMsg: "" },
@@ -68,35 +24,16 @@ const { data, loading: loadingQuerey,error: errorQuerey } = useQuery(GET_USER_IN
     })
     const [isAddingNewProduct, setIsAddingNewProduct] = useState(false)
     const productCart = useSelector((state: RootState) => state.data.cart)
-    const dispatch = useDispatch()
+    const userData = useSelector((state: RootState) => state.data.userData)
     const [addNewProductMutation, { loading, error }] = useMutation(ADD_NEW_PRODUCT, {
         context: {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         },
-        // onCompleted: (data) => {
-        //     console.log(data)
-        // }
-        // update: (cache, {data: {addNewProduct}}) =>     {
-        //     const data: any = cache.readQuery({query: GET_ALL_PRODUCTS})
-        //     // const products = cache.
-        //     console.log(addNewProduct)
-        //     // cache.writeQuery({
-        //     //     query: GET_ALL_PRODUCTS, 
-        //     //     data: { GetAllProducts: [...data.GetAllProducts, newProduct] },
-        //     //     })
-        //     //     data: { GetAllProducts: [...data.GetAllProducts, newProduct] },
-        //     // cache.writeQuery({
-        //     //     query: GET_ALL_PRODUCTS,
-        //     //     data: { GetAllProducts: [...data.GetAllProducts, newProduct] },
-        //     // })
-
-        // }
     });
     const handleOnLogOut = () => {
         cookie.remove("token")
-        // navigate("/")
         window.location.href = "/"
 
     }
@@ -118,11 +55,6 @@ const { data, loading: loadingQuerey,error: errorQuerey } = useQuery(GET_USER_IN
         })
     }
     const handleOnAddNewProduct = async () => {
-        console.log(123)
-        // handleOnInputChange(newProductInputData.image.value+"","image")
-        // handleOnInputChange(newProductInputData.createdBy.value+"","createdBy")
-        // handleOnInputChange(newProductInputData.description.value+"","description")
-        // handleOnInputChange(newProductInputData.name.value+"","name")
         if (
             newProductInputData.name.value &&
             newProductInputData.description.value &&
@@ -149,10 +81,8 @@ const { data, loading: loadingQuerey,error: errorQuerey } = useQuery(GET_USER_IN
                         data: { GetAllProducts: [...products.GetAllProducts, data.data.CreateNewProduct] }
                     })
                 },
-                // refetchQueries: [{query: GET_ALL_PRODUCTS}]
             })
 
-            setIsAddingNewProduct(false)
             const temp = newProductInputData
             temp.name.value = ""
             temp.name.errMsg = ""
@@ -167,6 +97,7 @@ const { data, loading: loadingQuerey,error: errorQuerey } = useQuery(GET_USER_IN
             temp.createdBy.value = ""
             temp.createdBy.errMsg = ""
             setNewProductInputData(temp)
+            setIsAddingNewProduct(false)
         }
     }
     const handleOnCloseAddNewProduct = () => {
@@ -189,8 +120,6 @@ const { data, loading: loadingQuerey,error: errorQuerey } = useQuery(GET_USER_IN
     if (loading) {
         return <Loading />
     }
-
-    // console.log(data)
     const isDissableAddNewProductBtn: boolean =
         newProductInputData.name.value.toString().length < 3 ||
         newProductInputData.description.value.toString().length < 3 ||
@@ -225,16 +154,12 @@ const { data, loading: loadingQuerey,error: errorQuerey } = useQuery(GET_USER_IN
                         <button disabled={isDissableAddNewProductBtn} onClick={handleOnAddNewProduct} className={`${isDissableAddNewProductBtn ? "bg-red-300" : "bg-red-600"}  text-white py-2 rounded-xl mt-2`}>Add new Product</button>
                     </div>
                 </div>
-
-
             ) : null}
             <h1 className='ml-8'>
                 <Link to={"/"}>Logo</Link>
             </h1>
             <ul className='flex'>
-
-                {!loading && data && data.GetUserInfo ? (
-                // {token ? (
+                {userData ? (
                     <>
                         <li className='mx-5 cursor-pointer' onClick={() => setIsAddingNewProduct(true)}>add product</li>
                         <li className='mx-5'>

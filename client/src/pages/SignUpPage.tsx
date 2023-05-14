@@ -8,17 +8,6 @@ import Navbar from "../components/Navbar";
 import { SIGNUP_MUTATION } from "../graphql/mutations";
 import { ISignUpData } from "../types";
 
-// interface ISignUpData {
-//   [key: string]: { value: string, errMsg: string }
-// }
-
-
-// const SIGNUP_MUTATION = gql`
-//   mutation SignUp($req: UserInputSignUp!) {
-//     SignUp(req: $req)
-//   }
-// `;
-
 const SignUpPage = () => {
 
     const cookies = new Cookies();
@@ -79,9 +68,6 @@ const SignUpPage = () => {
   }
   return (
 <>
-
-      {/* <Navbar /> */}
-      {/* <main className='w-full h-[94vh]'> */}
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       {loading && <Loading/>}
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -119,7 +105,6 @@ const SignUpPage = () => {
         </div>
       </div>
     </div>
-{/* </main> */}
 </>
   )
 }
