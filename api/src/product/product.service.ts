@@ -1,11 +1,12 @@
 import { Injectable, ForbiddenException } from '@nestjs/common';
 import { PrismaClient, User } from '@prisma/client';
 import { ProductInput } from './dto/product.input';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class ProductService {
 
-    constructor(private prisma: PrismaClient) {}
+    constructor(private prisma: PrismaService) {}
 
     async createNewProduct(userId: number, req: ProductInput) {
         try {

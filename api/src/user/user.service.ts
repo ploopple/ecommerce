@@ -5,11 +5,12 @@ import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import { UserInputSignUp } from './dto/user.input.signUp';
 import { UserInputLogin } from './dto/user.input.login';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class UserService {
 
-    constructor(private prisma: PrismaClient) { }
+    constructor(private prisma: PrismaService) { }
 
     private createJWTToken(userId: string): string {
         const token = jwt.sign({ userId }, process.env.SECRETKEY, {  expiresIn: '1h' });

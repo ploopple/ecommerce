@@ -7,6 +7,8 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { UserModule } from './user/user.module';
 import { PrismaClient } from '@prisma/client';
 import { ProductModule } from './product/product.module';
+import { PrismaService } from './prisma/prisma.service';
+import { PrismaModule } from './prisma/prisma.module';
 
 
 @Module({
@@ -20,9 +22,10 @@ import { ProductModule } from './product/product.module';
     UserModule,
     PrismaClient,
     ProductModule,
+    PrismaModule,
     // AuthModule
   ],
   controllers: [],
-  providers: [],
+  providers: [PrismaService],
 })
 export class AppModule {}
